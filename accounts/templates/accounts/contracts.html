@@ -1,26 +1,28 @@
 {% extends 'accounts/main.html' %}
 
 {% block content %}
-<h1>Requests & Contracts</h1>
-<hr>
 <div class="row">
-	<div class="col-md-6">
-		<h5>My Lexify requests</h5>
+	<div class="col-md-12">
+		<br>
+		<h5>My Lexify Requests</h5>
 		<div class="card card-body">		
 			<table class="table table-sm">
 				<tr>
-					<th>Request Title</th>
+					<th>Lexify Request Title</th>
 					<th>Date Created</th>
-					<th>Update</th>
-					<th>Remove</th>
+					<th>Time until Lexify Request Deadline</th>
+					<th>Number of Offers Received</th>
+					<th>Update Lexify Request</th>
+					<th>Remove Lexify Request</th>
 				</tr>
 
 				{% for req in requests %}
 					<tr>
 						<td>{{req.title}}</td>
 						<td>{{req.date_created}}</td>
+						<td></td>
+						<td></td>
 						<td><a class="btn btn-sm btn-info" href="{% url 'update_request' req.id %}">Update</a></td>
-
 						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_request' req.id %}">Delete</a></td>
 					</tr>
 				{% endfor %}
@@ -28,16 +30,16 @@
 			<td><a class="btn btn-sm btn-info" href="{% url 'request_selection' %}">Create a new request</a></td>
 		</div>
 	</div>
-		<div class="col-md-6">
+	<div class="col-md-12">
+		<br>
 		<h5>My Lexify Contracts</h5>
-		<div class="card card-body">		
+		<div class="card card-body">
 			<table class="table table-sm">
 				<tr>
-					<th>Contract Title</th>
+					<th>Lexify Contract Title</th>
 					<th>Date Created</th>
-					<th>Company name</th>
-					<th>Update</th>
-					<th>Remove</th>
+					<th>Lexify Service Provider Name</th>
+					<th>Copy of the Lexify Contract</th>
 				</tr>
 			</table>
 		</div>
