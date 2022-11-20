@@ -1,0 +1,43 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<br>
+<div class="list-group">
+  <h3 class="mb-1">What kind of service do you need?</h3>
+  <a href="{% url 'contract_request' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Help with Contracts</h5>
+    </div>
+  </a>
+  <a href="{% url 'legal_request' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Day-to-day Legal Advice</h5>
+    </div>
+  </a>
+  <a href="{% url 'dispute_selection' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Help with Dispute Resolution</h5>
+    </div>
+  </a>
+    <a href="{% url 'merger_request' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Help with Mergers & Acquisitions</h5>
+    </div>
+  </a>
+    <a href="{% url 'corporate_request' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Help with Corporate Governance</h5>
+    </div>
+  </a>
+    <a href="{% url 'data_request' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Help with Data Privacy</h5>
+    </div>
+  </a>
+    <a href="{% url 'training_request' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Legal Training for Management and Personnel</h5>
+    </div>
+  </a>
+</div>
+{% endblock content%}

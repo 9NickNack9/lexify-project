@@ -1,0 +1,179 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var offType = $('#id_legalOffers option:selected').val();
+			var offTypeLabel = "Type of offer wanted: ";
+			var offTypeData = '<p>' + offTypeLabel + ' ' + offType + '</p>';
+
+			var legHours = $('#id_legalHours option:selected').val();
+			var legHoursLabel = "Number of hours of legal advice needed per month: ";
+			var legHoursData = '<p>' + legHoursLabel + legHours + '</p>';
+
+			var legMonths = $('#id_legalMonths option:selected').val();
+			var legMonthsLabel = "Price valid for: ";
+			var legMonthsData = '<p>' + legMonthsLabel + ' ' + legMonths + ' months from Lexify Contract date' +'</p>';
+
+			var legAreaCheckboxes = $('input[name="legal_area"]:checked').map(function() {return $(this).val();}).get().join(', ');
+			document.body.append(legAreaCheckboxes);
+			var legAreaLabel = "I need advice on following areas of law: ";
+			var legAreaData = '<p>' + legAreaLabel + ' ' + legAreaCheckboxes + '</p>';
+
+			var trainDate = $('#id_b2bDate').val();
+			var trainDateLabel = "Your offer must be submitted by: ";
+			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
+
+			var languageBoxes = $('input[name="language"]:checked').map(function() {return $(this).val();}).get().join(', '); document.body.append(languageBoxes);
+			var languageTitle = "Languages needed for the performance of the work: ";
+			var languageData = '<p>' + languageTitle + ' ' + languageBoxes +'</p>';
+
+			var titleData = '<p><strong> I need day-to-day legal advice</strong></p>';
+
+			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
+
+			if($('#id_legalOffers').val() == "Single hourly rate for occasional legal advice in the amount needed from time to time. Billed monthly in arrears."){
+				var data = titleData + legHoursData + legMonthsData + legAreaData + trainDateData + languageData + legalText;
+			}else{
+				var data = titleData + offTypeData + legHoursData + legMonthsData + legAreaData + trainDateData + languageData + legalText;
+
+			}
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Static Example</title>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<!-- XDSoft DateTimePicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<h1>Create a day-to-day legal advice request</h1>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<label for="{{ form.legalOffers.id_for_label }}">Which type of offer do you want?:</label>
+					<br>
+					{{ form.legalOffers }}
+					<hr>
+					<label for="{{ form.legalHours.id_for_label }}"><strong>FOR FIXED NUMBER OF HOURS ONLY:</strong> How many hours of legal advice do you need per month?:</label>
+					<br>
+					{{ form.legalHours }}
+					<hr>
+					<label for="{{ form.legalMonths.id_for_label }}">I want the offered price to be valid for:</label>
+					{{ form.legalMonths }}
+					<h7> months from the Lexify Contract date.</h7>
+					<br>
+					<hr>
+					<label>In which areas of law do you need advice?:</label>
+					<br>
+					<input type="checkbox" name="legal_area" value="General legal advice" id="general_advice">
+					<label for="general_advice">General legal advice</label><br>
+					<input type="checkbox" name="legal_area" value="Sales (B2B)" id="b2b">
+					<label for="b2b">Sales (B2B)</label><br>
+					<input type="checkbox" name="legal_area" value="Sales (B2C)" id="b2c">
+					<label for="b2c">Sales (B2C)</label><br>
+					<input type="checkbox" name="legal_area" value="Employment" id="employment">
+					<label for="employment">Employment</label><br>
+					<input type="checkbox" name="legal_area" value="Real Estate & Construction" id="real_estate">
+					<label for="real_estate">Real Estate & Construction</label><br>
+					<input type="checkbox" name="legal_area" value="Sourcing" id="sourcing">
+					<label for="sourcing">Sourcing</label><br>
+					<input type="checkbox" name="legal_area" value="ICT & IT" id="ict">
+					<label for="ict">ICT & IT</label><br>
+					<input type="checkbox" name="legal_area" value="Intellectual Property Rights" id="property_rights">
+					<label for="property_rights">Intellectual Property Rights</label><br>
+					<input type="checkbox" name="legal_area" value="Data Privacy" id="data_privacy">
+					<label for="data_privacy">Data Privacy</label><br>
+					<input type="checkbox" name="legal_area" value="Competition/antitrust" id="competition">
+					<label for="competition">Competition/antitrust</label>
+					<hr>
+					<label>Who can make you an offer?</label>
+					{{ form.offerMaker }}
+					<br>
+					<hr>
+					<label>What languages are needed for the performance of the work?: </label>
+					<input type="checkbox" name="language" value="English" id="langEng">
+					<label for="langEng">English</label>
+					<input type="checkbox" name="language" value="Finnish" id="langFin">
+					<label for="langFin">Finnish</label>
+					<input type="checkbox" name="language" value="Swedish" id="langSwe">
+					<label for="langSwe">Swedish</label>
+					<input type="checkbox" name="language" value="German" id="langGer">
+					<label for="langGer">German</label>
+					<input type="checkbox" name="language" value="French" id="langFr">
+					<label for="langFr">French</label>
+					<br>
+					<hr>
+					<label>By when do you need offers from interested service providers?</label>
+					{{ form.b2bDate }}
+					<br>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					<br>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
+					<input type="reset" name="reset" value="Clear All"/>
+					<input type="submit" name="submit" id="submit "value="Submit your Lexify Request"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of your Lexify Request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

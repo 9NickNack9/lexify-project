@@ -1,0 +1,23 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<br>
+<div class="list-group">
+  <h3 class="mb-1">What do you need help with?</h3>
+  <a href="{% url 'sourcing_bustemplate' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">I need a sourcing agreement template for my business</h5>
+    </div>
+  </a>
+  <a href="{% url 'sourcing_suptemplate' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">I need legal comments on a sourcing agreement template sent by a supplier</h5>
+    </div>
+  </a>
+  <a href="{% url 'sourcing_supagreement' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">I need support with negotiating a sourcing agreement with a specific supplier (including occasional legal advice and contract comments during negotiation rounds)</h5>
+    </div>
+  </a>
+</div>
+{% endblock content%}

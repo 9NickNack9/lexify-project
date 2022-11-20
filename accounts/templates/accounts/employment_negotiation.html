@@ -1,0 +1,169 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var negContract = $('#id_employmentContract').val();
+			var negLabel = "Contract type to be negotiated: ";
+			var negData = '<p>' + negLabel  + negContract + '</p>';
+
+			var empBus = $('#id_employmentPos').val();
+			var empBusLabel = "Description of the position and tasks of the employee(s): ";
+			var empBusData = '<p>' + empBusLabel + ' ' + empBus + '</p>';
+
+			var otherInfoTitle = "Other information: ";
+			var otherInfo = $('#id_otherInfo').val();
+			var otherInfoData = '<p>' + otherInfoTitle + ' ' + otherInfo + '</p>';
+
+			var titleData = '<p><strong> I need help with negotiating a contract with an employee or executive.</strong></p>';
+
+			var trainDate = $('#id_b2bDate').val();
+			var trainDateLabel = "Your offer must be submitted by: ";
+			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
+
+			var invoiceType = "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+			var invoiceTypeTitle = "Price to be offered: ";
+			var invoiceTypeData = '<p>' + invoiceTypeTitle + invoiceType + '</p>';
+
+			var invoiceTitle = "How I wish to be invoiced: ";
+			var invoiceWay = $('#id_invoiceType').val();
+			var invoiceData = '<p>' + invoiceTitle + ' ' + invoiceWay +'</p>';
+
+			var languageBoxes = $('input[name="language"]:checked').map(function() {return $(this).val();}).get().join(', '); document.body.append(languageBoxes);
+			var languageTitle = "Languages needed for the performance of the work: ";
+			var languageData = '<p>' + languageTitle + ' ' + languageBoxes +'</p>';
+
+			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
+
+			var data = titleData + negData + empBusData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+
+	<style type="text/css">
+		.tab { margin-left: 40px; }
+	</style>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Static Example</title>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<!-- XDSoft DateTimePicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<h1>Create a Lexify Request</h1>
+    <h3>Help with Negotiating an Employment Contract with an Employee </h3>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<h6>What type of contract will be negotiated?</h6>
+					{{ form.employmentContract }}
+					<br>
+					<br>
+					<label><strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i></label>
+					<hr>
+					<label>Describe the position and tasks of the employee(s) with a few sentences:</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.employmentPos }}
+					<br>
+					<hr>
+					<label>Any other background information you would want to provide to Lexify legal service providers?:</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.otherInfo }}
+					<br>
+					<hr>
+					<label>Who can make you an offer?</label>
+					{{ form.offerMaker }}
+					<br>
+					<hr>
+					<label>How do you want to be invoiced?</label>
+					{{ form.invoiceType }}
+					<br>
+					<hr>
+					<label>What languages are needed for the performance of the work?: </label>
+					<input type="checkbox" name="language" value="English" id="langEng">
+					<label for="langEng">English</label>
+					<input type="checkbox" name="language" value="Finnish" id="langFin">
+					<label for="langFin">Finnish</label>
+					<input type="checkbox" name="language" value="Swedish" id="langSwe">
+					<label for="langSwe">Swedish</label>
+					<input type="checkbox" name="language" value="German" id="langGer">
+					<label for="langGer">German</label>
+					<input type="checkbox" name="language" value="French" id="langFr">
+					<label for="langFr">French</label>
+					<br>
+					<hr>
+					<label>By when do you need offers from interested service providers?</label>
+					{{ form.b2bDate }}
+					<br>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
+					<input type="submit" name="submit" id="submit "value="Submit  your Lexify Request"/>
+					<input type="reset" name="reset" value="Clear All"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of your Lexify Request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

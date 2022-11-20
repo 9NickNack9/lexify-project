@@ -1,0 +1,36 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<br>
+<div class="list-group">
+  <a href="{% url 'request_selection' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Create Lexify Request</h5>
+    </div>
+    <p class="mb-1">Create a tender request to buy legal services</p>
+  </a>
+  <a href="{% url 'offers' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Received offers</h5>
+    </div>
+    <p class="mb-1">Check for recieved offers</p>
+  </a>
+  <a href="{% url 'contracts' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">My requests & contracts</h5>
+    </div>
+    <p class="mb-1">Check for your requests and contracts</p>
+  </a>
+  <a href="{% url 'user-page' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">My account profile</h5>
+    </div>
+    <p class="mb-1">Check and change account details and options</p>
+  </a>
+  <a href="{% url 'logout' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Log out</h5>
+    </div>
+  </a>
+</div>
+{% endblock content%}

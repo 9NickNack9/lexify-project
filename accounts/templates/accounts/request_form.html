@@ -1,0 +1,152 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var reqType = $('#id_requestType option:selected').val();
+			var reqTypeLabel = "Type of service wanted: ";
+			var reqTypeData = '<p>' + reqTypeLabel + ' ' + reqType + '</p>';
+
+			var conType = $('#id_contractType option:selected').val();
+			var conTypeLabel = "Type of contract needed: ";
+			var conTypeData = '<p>' + conTypeLabel + ' ' + conType + '</p>';
+
+			var hourCount = $('#id_hourCount option:selected').val();
+			var hourCountLabel = "Hours of day-to-day advice needed: ";
+			var hourCountData = '<p>' + hourCountLabel + ' ' + hourCount + '</p>';
+
+			var offerMaker = $('#id_offerMaker option:selected').val();
+			var offerMakerLabel = "Who can make offers: ";
+			var offerMakerData = '<p>' + offerMakerLabel + ' ' + offerMaker + '</p>';
+
+			var language = $('#id_language option:selected').val();
+			var languageLabel = "Legal support language: ";
+			var languageData = '<p>' + languageLabel + ' ' + language + '</p>';
+
+			var offerTime = $('#id_offerTime option:selected').val();
+			var offerTimeLabel = "How soon are offers needed: ";
+			var offerTimeData = '<p>' + offerTimeLabel + ' ' + offerTime + '</p>';
+
+			var invoiceType = $('#id_invoiceType option:selected').val();
+			var invoiceTypeLabel = "Invoicing type: ";
+			var invoiceTypeData = '<p>' + invoiceTypeLabel + ' ' + invoiceType + '</p>';
+
+			var additionalInfo = $('#id_additionalInfo option:selected').val();
+			var additionalInfoLabel = "Able to ask for additional information: ";
+			var additionalInfoData = '<p>' + additionalInfoLabel + ' ' + additionalInfo + '</p>';
+
+			var title = $('input[name="title"]').val();
+			var titleLabel = "Title of the request: ";
+			var titleData = '<p><strong>' + title + '</strong></p>';
+
+			var note = $('#id_note').val();
+			var noteLabel = "Additional info regarding the request: ";
+			var noteData = '<p>' + noteLabel + ' ' + note + '</p>';
+
+			var data = titleData + reqTypeData + conTypeData + hourCountData + offerMakerData + languageData + offerTimeData + invoiceTypeData + additionalInfoData +  noteData;
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+</head>
+
+<body>
+	<h1>Buy Services/ Create Request</h1>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+	    			<label for="{{ form.requestType.id_for_label }}">What do you need?:</label>
+	    			<br>
+	    			{{ form.requestType }}
+	    			<hr>
+	    			<label for="{{ form.contractType.id_for_label }}">Contract Type:</label>
+	    			<br>
+	    			{{ form.contractType }}
+	    			<hr>
+	    			<label for="{{ form.hourCount.id_for_label }}">Hours of day-to-day advice per month:</label>
+	    			<br>
+	    			{{ form.hourCount }}
+	    			<hr>
+	    			<label for="{{ form.offerMaker.id_for_label }}">Who can make you an offer?:</label>
+	    			<br>
+	    			{{ form.offerMaker }}		
+	    			<hr>
+	    			<label for="{{ form.language.id_for_label }}">What language do you need legal support in?:</label>
+	    			<br>
+	    			{{ form.language }}		
+	    			<hr>
+	    			<label for="{{ form.offerTime.id_for_label }}">How soon do you need offers from the service providers?:</label>
+	    			<br>
+	    			{{ form.offerTime }}		
+	    			<hr>
+	    			<label for="{{ form.invoiceType.id_for_label }}">How do you want to be invoiced?:</label>
+	    			<br>
+	    			{{ form.invoiceType }}
+	    			<hr>
+	    			<label for="{{ form.additionalInfo.id_for_label }}">Can the service providers ask for additional information before the Lexify request expires?:</label>
+	    			<br>
+	    			{{ form.additionalInfo }}		
+	    			<hr>
+	  				{{ form.management_form }}
+					<label for="{{ form.title.id_for_label }}">Give a name to your Lexify request:</label>
+					<br>
+	    			{{ form.title }}
+	    			<hr>
+	    			<label for="{{ form.note.id_for_label }}">Do you want to provide any additional information regarding your Lexify request (e.g. amount of due diligence material, estimated value of transaction, etc.)? If not, just leave the box empty:</label>
+	    			<br>
+	    			{{ form.note }}		
+	    			<hr>
+	    			<input type="button" name="preview" id="preview" value="Preview"/>
+					<input type="submit" name="submit" id="submit "value="Submit"/>
+					<input type="reset" name="reset" value="Clear"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

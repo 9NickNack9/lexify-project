@@ -1,0 +1,149 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var offType = $('#id_legalOffers option:selected').val();
+			var offTypeLabel = "Type of offer wanted: ";
+			var offTypeData = '<p>' + offTypeLabel + ' ' + offType + '</p>';
+
+			var legHours = $('#id_legalHours option:selected').val();
+			var legHoursLabel = "Monthly hours of legal advice needed: ";
+			var legHoursData = '<p>' + legHoursLabel + legHours + '</p>';
+
+			var legMonths = $('#id_legalMonths option:selected').val();
+			var legMonthsLabel = "Price valid for: ";
+			var legMonthsData = '<p>' + legMonthsLabel + ' ' + legMonths + ' months from contract date' +'</p>';
+
+			var legAreaCheckboxes = $('input[type="checkbox"]:checked').map(function() {return $(this).val();}).get().join(', ');
+			document.body.append(legAreaCheckboxes);
+			var legAreaLabel = "Areas of law help is needed on: ";
+			var legAreaData = '<p>' + legAreaLabel + ' ' + legAreaCheckboxes + '</p>';
+
+			var title = $('input[name="title"]').val();
+			var titleLabel = "Title of the request: ";
+			var titleData = '<p><strong>' + title + '</strong></p>';
+
+			var data = titleData + offTypeData + legHoursData + legMonthsData + legAreaData;
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+
+	<style type="text/css">
+		.tab { margin-left: 40px; }
+	</style>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Static Example</title>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<!-- XDSoft DateTimePicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<h1>Create a sourcing contract request</h1>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<h5>What kind of help do you need?:</h5>
+					<br>
+					<input type="radio" name="sourcing_help" value="Sourcing agreement template" id="sourcing_agreement">
+					<label for="sourcing_agreement">I need a sourcing agreement template for my business – FIXED PRICE</label><br>
+					<div class="tab">
+						<label>Is the agreement template intended for buying </label>
+						{{ form.sourcingTemplate }}
+						<br>
+						<label>Do you want the template to be generic in nature, applicable to all or most products/services or customized for the purchase of a specific product/service type?</label>
+						<br>
+						{{ form.sourcingGeneric }}
+						<br>
+						<label>If you chose customized, please describe the product/service type for which the agreement template should be customized:</label> 
+						{{ form.sourcingCustomized }}
+					</div>
+					<br>
+					<h5>OR</h5>
+					<br>
+					<input type="radio" name="sourcing_help" value="Sourcing agreement template comments" id="sourcing_comments">
+					<label for="sourcing_comments">I need legal comments on an agreement template sent by a supplier – HOURLY RATE</label><br>
+					<br>
+					<div class="tab">
+						<label>Briefly describe the type of product/service you are buying with the agreement:</label>
+						<br>
+						{{ form.sourcingComments }}
+					</div>
+					<br>
+					<h5>OR</h5>
+					<br>
+					<input type="radio" name="sourcing_help" value="Lawyer to negotiate sourcing agreement" id="sourcing_lawyer">
+					<label for="sourcing_lawyer">I need a lawyer to negotiate a sourcing agreement with a specific supplier (including providing legal comments on the sourcing agreement draft during negotiation rounds)” – HOURLY RATE</label><br>
+					<br>
+					<div class="tab">
+						<label>Briefly describe the type of product/service you are buying with the agreement:</label>
+						<br>
+						{{ form.sourcingLawyer }}
+					</div>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview"/>
+					<input type="submit" name="submit" id="submit "value="Submit"/>
+					<input type="reset" name="reset" value="Clear"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

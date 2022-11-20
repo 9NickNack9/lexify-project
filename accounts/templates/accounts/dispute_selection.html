@@ -1,0 +1,23 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<br>
+<div class="list-group">
+  <h3 class="mb-1">Are you...?</h3>
+  <a href="{% url 'dispute_court' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">A party to court proceedings</h5>
+    </div>
+  </a>
+  <a href="{% url 'dispute_arbitration' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">A party to arbitration proceedings</h5>
+    </div>
+  </a>
+  <a href="{% url 'dispute_settlement' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">A party to settlement negotiations</h5>
+    </div>
+  </a>
+</div>
+{% endblock content%}

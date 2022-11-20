@@ -1,0 +1,256 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var offType = $('#id_legalOffers option:selected').val();
+			var offTypeLabel = "Type of offer wanted: ";
+			var offTypeData = '<p>' + offTypeLabel + ' ' + offType + '</p>';
+
+			var legHours = $('#id_legalHours option:selected').val();
+			var legHoursLabel = "Monthly hours of legal advice needed: ";
+			var legHoursData = '<p>' + legHoursLabel + legHours + '</p>';
+
+			var legMonths = $('#id_legalMonths option:selected').val();
+			var legMonthsLabel = "Price valid for: ";
+			var legMonthsData = '<p>' + legMonthsLabel + ' ' + legMonths + ' months from contract date' +'</p>';
+
+			var legAreaCheckboxes = $('input[type="checkbox"]:checked').map(function() {return $(this).val();}).get().join(', ');
+			document.body.append(legAreaCheckboxes);
+			var legAreaLabel = "Areas of law help is needed on: ";
+			var legAreaData = '<p>' + legAreaLabel + ' ' + legAreaCheckboxes + '</p>';
+
+			var title = $('input[name="title"]').val();
+			var titleLabel = "Title of the request: ";
+			var titleData = '<p><strong>' + title + '</strong></p>';
+
+			var data = titleData + offTypeData + legHoursData + legMonthsData + legAreaData;
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+
+	<style type="text/css">
+		.tab { margin-left: 40px; }
+	</style>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Static Example</title>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<!-- XDSoft DateTimePicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<h5>What type of contract(s) do you need help with?</h5>
+					<br>
+					<input type="radio" name="realestate_help" value="Sale and Purchase Agreement" id="realestate_agreement">
+					<label for="realestate_agreement">Sale and Purchase Agreement</label><br>
+					<div class="tab">
+					<label>What type of sale and purchase agreement do you want? </label>
+					{{ form.realestateAgreement }}
+					<br>
+					<label>Are you...</label>
+					{{ form.agreementBuyer }}
+					<br>
+					<label>Describe the target property briefly (purpose of use, size, etc.) with a few sentences:</label>
+					<br>
+					{{ form.agreementDescription }}
+					<br>
+					<label>What is the range of the expected purchase price (cash and debt free)? </label>
+					{{ form.agreementRange }}
+					<br>
+					<label>Do you want a Legal Due Diligence inspection (with written report of material findings) to be included in the work?</label>
+					{{ form.agreementInspection }}
+					<br>
+					<label>Please specify the nature of the support needed (see description of alternatives below)</label>
+					{{ form.realSalePurchase }}
+					<br>
+					<label><strong>(a) Holistic legal representation </strong>throughout the transaction process (including but not limited to drafting of the sale and purchase agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<label><strong>(b) Occasional support </strong>with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction) <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided (valid for 12 months from contract date or until the transaction is closed or abandoned, whichever is sooner)</i></label>
+					<label><strong>(c) First draft of the sale and purchase agreement</strong>, ready for delivery to the other party <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<label><strong>(d) First draft of the sale and purchase agreement</strong>, ready for delivery to the buyer/seller <strong>and thereafter occasional support</strong> with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction) – HOURLY RATE (valid for 12 months from contract date or until the transaction is closed or abandoned, whichever is sooner)</label>
+					<br>
+					<hr>
+					<label>Any other background information you would want to provide to Lexify legal service providers?:</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.otherInfo }}
+					<br>
+					<hr>
+					<label>Who can make you an offer?</label>
+					{{ form.offerMaker }}
+					<br>
+					<hr>
+					<label>How do you want to be invoiced?</label>
+					{{ form.invoiceType }}
+					<br>
+					<hr>
+					<label>What languages are needed for the performance of the work?: </label>
+					<input type="checkbox" name="language" value="English" id="langEng">
+					<label for="langEng">English</label>
+					<input type="checkbox" name="language" value="Finnish" id="langFin">
+					<label for="langFin">Finnish</label>
+					<input type="checkbox" name="language" value="Swedish" id="langSwe">
+					<label for="langSwe">Swedish</label>
+					<input type="checkbox" name="language" value="German" id="langGer">
+					<label for="langGer">German</label>
+					<input type="checkbox" name="language" value="French" id="langFr">
+					<label for="langFr">French</label>
+					<br>
+					<hr>
+					<label>By when do you need offers from interested service providers?</label>
+					{{ form.b2bDate }}
+					<br>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					</div>
+					<br>
+					<h5>OR</h5>
+					<br>
+					<input type="radio" name="realestate_help" value="Sale and Leaseback" id="realestate_leaseback">
+					<label for="realestate_leaseback">Sale and Leaseback </label><br>
+					<div class="tab">
+					<label>Are you... </label>
+					{{ form.leasebackSeller }}
+					<br>
+					<label>Describe the target property briefly with a few sentences (purpose of use, size, etc.)</label>
+					<br>
+					{{ form.leasebackDescription }}
+					<br>
+					<label>What is the range of the expected purchase price (cash and debt free)? </label>
+					{{ form.leasebackRange }}
+					<br>
+					<br>
+					<label><strong>[FOR BUYER/LANDLORD ONLY]</strong> Do you want a Legal Due Diligence inspection (with written report of material findings) to be included in the work?</label>
+					{{ form.leasebackInspection }}
+					<br>
+					<label>Do you need... (check info below)</label>
+					{{ form.realLeaseBack }}
+					<br>
+					<label><strong>(a) Holistic legal representation </strong>throughout the transaction process (including but not limited to drafting of the sale and purchase agreement, lease agreement and related documents, required negotiations with the buyer/landlord – seller/tenant and completion of signing/closing related legal actions) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<label><strong>(b) Occasional support </strong>with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction) – HOURLY RATE (valid for 12 months from contract date or until the transaction is closed or abandoned, whichever is sooner)</label>
+					<label><strong>(c) First draft of the sale and purchase agreement and lease agreement</strong>, ready for delivery to the buyer/landlord – seller/tenant <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<label><strong>(d) First draft of the sale and purchase agreement and lease agreement</strong>, ready for delivery to the buyer/landlord – seller/tenant – FIXED PRICE and <strong>thereafter occasional support </strong>with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction) – HOURLY RATE (valid for 12 months from contract date or until the transaction is closed or abandoned, whichever is sooner)</label>
+					</div>
+					<br>
+					<h5>OR</h5>
+					<br>
+					<input type="radio" name="realestate_help" value="Lease Agreement" id="realestate_leaseAgreement">
+					<label for="realestate_leaseAgreement">Lease Agreement</label><br>
+					<div class="tab">
+					<label>What type of agreement do you want?</label>
+					{{ form.leaseAgreement }}
+					<br>
+					<label>Are you... </label>
+					{{ form.leaseRole }}
+					<br>
+					<label>Describe the property to be leased briefly with a few sentences (size, current quality level, etc.)</label>
+					<br>
+					{{ form.leaseDescription }}
+					<br>
+					<label>What is the range of the expected monthly rent amount (VAT 0%)? </label>
+					{{ form.leaseRange }}
+					<br>
+					<label>Do you need... (check info below)</label>
+					{{ form.realLease }}
+					<br>
+					<label><strong>(a)</strong> Holistic legal representation throughout the lease agreement negotiation process (including but not limited to drafting of the lease agreement and related documents, required negotiations with the landlord/seller) – FIXED PRICE</label>
+					<label><strong>(b)</strong> Occasional support with the lease agreement negotiation process (e.g. occasional commenting of the lease agreement draft) – HOURLY RATE (valid for 12 months from contract date or until the lease agreement is signed or abandoned, whichever is sooner)</label>
+					<label><strong>(c)</strong> First draft of the lease agreement, ready for delivery to the landlord/tenant – FIXED PRICE</label>
+					<label><strong>(d)</strong> First draft of the lease agreement, ready for delivery to the landlord/tenant – FIXED PRICE and thereafter occasional support with the lease agreement negotiation process (e.g. commenting of the landlord’s/tenant’s responses on the lease agreement draft) – HOURLY RATE (valid for 12 months from contract date or until the lease agreement is signed or abandoned, whichever is sooner</label>
+					</div>
+					<br>
+					<h5>OR</h5>
+					<br>
+					<input type="radio" name="realestate_help" value="Construction Agreement" id="realestate_construction">
+					<label for="realestate_construction">Construction Agreement</label><br>
+					<div class="tab">
+					<label>Are you... </label>
+					{{ form.constructionAgreement }}
+					<br>
+					<label>Describe the work to be performed with a few sentences (general type and scope of work)</label>
+					<br>
+					{{ form.constructionDescription }}
+					<br>
+					<label>What is the range of the expected contract value (VAT 0%)? </label>
+					{{ form.constructionRange }}
+					<br>
+					<label>Do you need... (check info below)</label>
+					{{ form.realConstruction }}
+					<br>
+					<label><strong>(a)</strong> Holistic legal representation throughout the construction agreement negotiation process (including but not limited to drafting of the construction agreement and related documents (excluding purely technical scope of work appendices), required negotiations with the contractor/client, etc.) – FIXED PRICE</label>
+					<label><strong>(b)</strong> Occasional support with the construction agreement negotiation process (e.g. commenting of the construction agreement documentation, legal advice during different stages of the negotiations) – HOURLY RATE (valid for 12 months from contract date or until the construction agreement is signed or abandoned, whichever is sooner)</label>
+					<label><strong>(c)</strong> First draft of the construction agreement (excluding purely technical scope of work appendices), ready for delivery to the contractor/client – FIXED PRICE</label>
+					<label><strong>(d)</strong> First draft of the construction agreement (excluding purely technical scope of work appendices), ready for delivery to the contractor/client – FIXED PRICE and thereafter occasional support with the construction agreement negotiation process (e.g. further commenting of the construction agreement documentation, legal advice during different stages of the negotiations) – HOURLY RATE (valid for 12 months from contract date or until the construction agreement is signed or abandoned, whichever is sooner)</label>
+					</div>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview"/>
+					<input type="submit" name="submit" id="submit "value="Submit"/>
+					<input type="reset" name="reset" value="Clear"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

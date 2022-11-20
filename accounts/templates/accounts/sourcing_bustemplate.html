@@ -1,0 +1,183 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var agrInt = $('#id_sourcingTemplate').val();
+			var agrIntLabel = "Agreement template is intended for buying: ";
+			var agrIntData = '<p>' + agrIntLabel + agrInt + '</p>';
+
+			var tempDesc = $('#id_sourcingGeneric').val();
+			var tempDescLabel = "Nature of the template: ";
+			var tempDescData = '<p>' + tempDescLabel + ' ' + tempDesc +'</p>';
+
+			if ($('#id_sourcingGeneric').val() == "Generic"){
+				var tempCustom = "N/A. Template general in nature, not customized for specific products or services.";
+			}else{
+				var tempCustom = $('#id_sourcingCustomized').val();
+			}
+			var tempCustomLabel = "Description of the product/service type for which the template should be customized: ";
+			var tempCustomData = '<p>' + tempCustomLabel + tempCustom +'</p>';
+
+			var otherInfoTitle = "Other information provided by the customer: ";
+			var otherInfo = $('#id_otherInfo').val();
+			var otherInfoData = '<p>' + otherInfoTitle + ' ' + otherInfo + '</p>';
+
+			var trainDate = $('#id_b2bDate').val();
+			var trainDateLabel = "Your offer must be submitted by: ";
+			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
+
+			var invoiceType = "Lump sum fixed price for the entire work.";
+			var invoiceTypeTitle = "Price to be offered: ";
+			var invoiceTypeData = '<p>' + invoiceTypeTitle + invoiceType + '</p>';
+
+			var invoiceTitle = "How customer wishes to be invoiced: ";
+			var invoiceWay = $('#id_invoiceType').val();
+			var invoiceData = '<p>' + invoiceTitle + ' ' + invoiceWay +'</p>';
+
+			var languageBoxes = $('input[type="checkbox"]:checked').map(function() {return $(this).val();}).get().join(', '); document.body.append(languageBoxes);
+			var languageTitle = "Languages needed for the performance of the work: ";
+			var languageData = '<p>' + languageTitle + ' ' + languageBoxes +'</p>';
+
+			var titleData = '<p><strong> I need a sourcing agreement template for my business.</strong></p>';
+
+			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
+
+			var data = titleData + agrIntData + tempDescData + tempCustomData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
+
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+
+	<style type="text/css">
+		.tab { margin-left: 40px; }
+	</style>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Static Example</title>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<!-- XDSoft DateTimePicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<h1>Create a Lexify Request</h1>
+    <h3>Help with Sourcing Contract Template</h3>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<label>Is the agreement template intended for buying: </label>
+					<br>
+					{{ form.sourcingTemplate }}
+					<br>
+					<hr>
+					<label>Do you want the template to be a) generic in nature, applicable to all or most products/services or b) customized for the purchase of a specific product/service type?</label>
+					<br>
+					{{ form.sourcingGeneric }}
+					<br>
+					<label><strong>If you selected customized</strong>, please describe the product/service type for which the agreement template should be customized:</label> 
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.sourcingCustomized }}
+					<br>
+					<hr>
+					<label>Any other background information you would want to provide to Lexify legal service providers?:</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.otherInfo }}
+					<br>
+					<hr>
+					<label>Who can make you an offer?</label>
+					{{ form.offerMaker }}
+					<br>
+					<label><strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<br>
+					<hr>
+					<label>How do you want to be invoiced?</label>
+					{{ form.invoiceType }}
+					<br>
+					<hr>
+					<label>What languages are needed for the performance of the work?: </label>
+					<input type="checkbox" name="language" value="English" id="langEng">
+					<label for="langEng">English</label>
+					<input type="checkbox" name="language" value="Finnish" id="langFin">
+					<label for="langFin">Finnish</label>
+					<input type="checkbox" name="language" value="Swedish" id="langSwe">
+					<label for="langSwe">Swedish</label>
+					<input type="checkbox" name="language" value="German" id="langGer">
+					<label for="langGer">German</label>
+					<input type="checkbox" name="language" value="French" id="langFr">
+					<label for="langFr">French</label>
+					<br>
+					<hr>
+					<label>By when do you need offers from interested service providers?</label>
+					{{ form.b2bDate }}
+					<br>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					<br>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
+					<input type="submit" name="submit" id="submit "value="Submit your Lexify Request"/>
+					<input type="reset" name="reset" value="Clear All"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of your Lexify Request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var partyType = $('#id_dispParty option:selected').val();
+			var partyLabel = "Type of party: ";
+			var partyData = '<p>' + partyLabel + ' ' + partyType + '</p>';
+
+			var roleType = $('#id_dispRole option:selected').val();
+			var roleTypeLabel = "Role of applicant: ";
+			var roleTypeData = '<p>' + roleTypeLabel + ' ' + roleType + '</p>';
+
+			var helpArea = $('#id_dispArea option:selected').val();
+			var helpAreaLabel = "Type of help needed: ";
+			var helpAreaData = '<p>' + helpAreaLabel + ' ' + helpArea + '</p>';
+
+			var title = $('input[name="title"]').val();
+			var titleLabel = "Title of the request: ";
+			var titleData = '<p><strong>' + title + '</strong></p>';
+
+			var data = titleData + partyData + roleTypeData + helpAreaData;
+
+			$('#preview_data').html('');
+			$('#preview_data').append(data);
+			$('#preview_data').dialog({
+				resizable: false,
+				modal: true,
+				buttons: 
+				{
+					'Submit': function() 
+					{
+						//submit the form
+						$(this).dialog("close");
+					},
+					Cancel: function() 
+					{
+						$(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+	
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<title>Static Example</title>
+
+  	<!-- jQuery -->
+  	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  	<!-- XDSoft DateTimePicker -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
+	<style type="text/css">
+	<!--
+	.tab { margin-left: 40px; }
+		-->
+	</style>
+</head>
+
+<body>
+	<h1>Create a Dispute Resolution Support request</h1>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<h5>Are you...</h5>
+					{{ form.dispRole }}
+					<br>
+					<hr>
+					<h5>Are you...</h5>
+					{{ form.dispParty }}
+					<br>
+					<br>
+					<h7>What do you need? (See info below):</h7>
+					{{ form.dispArea }} 
+					<br>
+					<h7><strong>(a)</strong> Holistic legal representation in a court dispute (including e.g. drafting of legal briefs, representation in court hearings, attorney-client communications) – FIXED PRICE</h7>
+					<br>
+					<h7><strong>(b)</strong> Occasional support with court dispute proceedings (e.g. commenting on legal briefs, periodic advice regarding legal strategy, etc.) – HOURLY RATE (valid for 24 months from contract date or until the court proceedings end, whichever is sooner) </h7>
+					<br>
+					<h7><strong>(c)</strong> Holistic legal representation in arbitration proceedings (including e.g. drafting of legal briefs, representation in arbitration hearings, attorney-client communications) – FIXED PRICE</h7>
+					<br>
+					<h7><strong>(d)</strong> Occasional support with arbitration proceedings (e.g. commenting on legal briefs, periodic advice regarding legal strategy, etc.) – HOURLY RATE (valid for 24 months from contract date or until the arbitration proceedings end, whichever is sooner)</h7>
+					<br>
+					<h7><strong>(e)</strong> Holistic legal representation in settlement negotiations (including e.g. drafting a settlement agreement, negotiations with the other party, attorney-client communications) – FIXED PRICE</h7>
+					<br>
+					<h7><strong>(f)</strong> Occasional support with settlement negotiations (e.g. commenting on settlement agreement, periodic advice regarding legal strategy, etc.) – HOURLY RATE (valid for 12 months from contract date or until settlement is concluded, whichever is sooner)</h7>
+					<br>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview"/>
+					<input type="submit" name="submit" id="submit "value="Submit"/>
+					<input type="reset" name="reset" value="Clear"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

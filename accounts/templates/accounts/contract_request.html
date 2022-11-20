@@ -1,0 +1,38 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<br>
+<div class="list-group">
+  <h3 class="mb-1">What type of contract do you need help with?</h3>
+  <a href="{% url 'b2b_request' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Sales (B2B)</h5>
+    </div>
+  </a>
+  <a href="{% url 'b2c_request' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Sales (B2C)</h5>
+    </div>
+  </a>
+  <a href="{% url 'employment_selection' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Employment & Termination</h5>
+    </div>
+  </a>
+    <a href="{% url 'realestate_selection' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Real Estate & Construction</h5>
+    </div>
+  </a>
+    <a href="{% url 'sourcing_selection' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Sourcing</h5>
+    </div>
+  </a>
+  <a href="{% url 'sourcing_selection' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">(ICT & IT) TAI IPR</h5>
+    </div>
+  </a>
+</div>
+{% endblock content%}

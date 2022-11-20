@@ -1,0 +1,23 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<br>
+<div class="list-group">
+  <h3 class="mb-1">What type of contract do you need help with?</h3>
+  <a href="{% url 'employment_template' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">I need a contract template for my business</h5>
+    </div>
+  </a>
+  <a href="{% url 'employment_negotiation' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">I need help with negotiating a contract with an employee or executive</h5>
+    </div>
+  </a>
+  <a href="{% url 'employment_documents' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">I need other employment related document template(s) for my business</h5>
+    </div>
+  </a>
+</div>
+{% endblock content%}

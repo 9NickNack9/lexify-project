@@ -1,0 +1,264 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var reqType = $('#id_sellOrBuy option:selected').val();
+			var reqTypeLabel = "I am: ";
+			var reqTypeData = '<p>' + reqTypeLabel + ' ' + reqType + '</p>';
+
+			var merType = $('#id_mergerType option:selected').val();
+			var merTypeLabel = "Object of sale: ";
+			var merTypeData = '<p>' + merTypeLabel + ' ' + merType + '</p>';
+
+			var compType = $('#id_mergerCompany option:selected').val();
+			var compTypeLabel = "My company is: ";
+			var compTypeData = '<p>' + compTypeLabel + ' ' + compType + '</p>';
+
+			var compOthType = $('#id_mergerOtherCompany option:selected').val();
+			var compOthTypeLabel = "The other party's company is: ";
+			var compOthTypeData = '<p>' + compOthTypeLabel + ' ' + compOthType + '</p>';
+
+			var compTarget = $('#id_mergerTarget option:selected').val();
+			var compTargetLabel = "The target company is: ";
+			var compTargetData = '<p>' + compTargetLabel + ' ' + compTarget + '</p>';
+
+			var busLine = $('#id_mergerBusinessLine').val();
+			var busLineLabel = "Description of the target: ";
+			var busLineData = '<p>' + busLineLabel + ' ' + busLine + '</p>';
+
+			var othInfo = $('#id_otherInfo').val();
+			var othInfoLabel = "Other background information: ";
+			var othInfoData = '<p>' + othInfoLabel + ' ' + othInfo + '</p>';
+
+			var purRange = $('#id_mergerRange option:selected').val();
+			var purRangeLabel = "Range of the expected purchase price (cash and debt free): ";
+			var purRangeData = '<p>' + purRangeLabel + ' ' + purRange + '</p>';
+
+			var merHelp = $('#id_mergerArea option:selected').val();
+			var merHelpLabel = "Type of support needed: ";
+			var merHelpData = '<p>' + merHelpLabel + ' ' + merHelp + '</p>';
+
+			var trainDate = $('#id_b2bDate').val();
+			var trainDateLabel = "Your offer must be submitted by: ";
+			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
+
+			if($('#id_mergerArea').val() == 'Holistic legal representation throughout the transaction process (including but not limited to legal due diligence, drafting of the sale and purchase agreement and related documents, required negotiations with the other party and support with signing and closing related actions)' || $('#id_mergerArea').val() == 'Legal due diligence regarding the target; reporting of findings with short form ”red flag” LDD report' || $('#id_mergerArea').val() == 'Legal due diligence regarding the target; reporting of findings with long form LDD report (comprehensive review of all legal matters related to the target, not only identified ”red flag” issues)')
+			{
+				var invoiceType = "Lump sum fixed price for the entire work.";
+			}else if($('#id_mergerArea').val() == 'Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)')
+			{
+				var invoiceType = "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction has been closed or abandoned, whichever is sooner.";
+			}
+			
+
+			var invoiceTypeTitle = "Price to be offered: ";
+			var invoiceTypeData = '<p>' + invoiceTypeTitle + invoiceType + '</p>';
+
+			var invoiceTitle = "How I wish to be invoiced: ";
+			var invoiceWay = $('#id_invoiceType').val();
+			var invoiceData = '<p>' + invoiceTitle + ' ' + invoiceWay +'</p>';
+
+			var languageBoxes = $('input[name="language"]:checked').map(function() {return $(this).val();}).get().join(', '); document.body.append(languageBoxes);
+			var languageTitle = "Languages needed for the performance of the work: ";
+			var languageData = '<p>' + languageTitle + ' ' + languageBoxes +'</p>';
+
+			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
+
+			var title = $('input[name="title"]').val();
+			var titleLabel = "Title of the request: ";
+			var titleData = '<p><strong>I Need Support with Mergers & Aquisitions</strong></p>';
+
+			var data = titleData + reqTypeData + merTypeData + compTypeData + compOthTypeData + compTargetData + busLineData + othInfoData + purRangeData + merHelpData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+	
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<title>Static Example</title>
+
+  	<!-- jQuery -->
+  	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  	<!-- XDSoft DateTimePicker -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
+	<style type="text/css">
+		.tab { margin-left: 40px; }
+		.tooltip {
+		  position: relative;
+		  display: inline-block;
+		  border-bottom: 1px dotted black;
+		}
+
+		.tooltip .tooltiptext {
+		  visibility: hidden;
+		  width: 120px;
+		  background-color: black;
+		  color: #fff;
+		  text-align: center;
+		  border-radius: 6px;
+		  padding: 5px 0;
+
+		  /* Position the tooltip */
+		  position: absolute;
+		  z-index: 1;
+		}
+
+		.tooltip:hover .tooltiptext {
+		  visibility: visible;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Create a Lexify Request</h1>
+	<h3>Mergers & Aquisitions</h3>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<label>Are you...</label>
+					<br>
+					{{ form.sellOrBuy }}
+					<br>
+					<hr>
+					<label>The object of sale is...</label>
+					<br>
+					{{ form.mergerType }}
+					<br>
+					<hr>
+					<label>Are you a...</label>
+					<br>
+					{{ form.mergerCompany }}
+					<br>
+					<hr>
+					<label>Is the other party to the transaction a...</label>
+					<br>
+					{{ form.mergerOtherCompany }}
+					<br>
+					<hr>
+					<label>Is the target a...</label>
+					<br>
+					{{ form.mergerTarget }}
+					<br>
+					<hr>
+					<label>Describe the object of sale briefly (e.g. line of business, number of employees, etc.):</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.mergerBusinessLine }}
+					<br>
+					<hr>
+					<label>Any other background information (e.g. amount of LDD material, if applicable) you would want to provide to Lexify legal service providers?:</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.otherInfo }}
+					<br>
+					<hr>
+					<label>What is the range of the expected purchase price (cash and debt free)?</label>
+					<br>
+					{{ form.mergerRange }}
+					<br>
+					<hr>
+					<label>What do you need (see description of alternatives below):</label>
+					<br>
+					{{ form.mergerArea }}
+					<br>
+					<label><strong>(1) Holistic legal representation </strong>throughout the transaction process (including but not limited to legal due diligence, drafting of the sale and purchase agreement and related documents, required negotiations with the other party and support with signing and closing related actions) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<br>
+					<label><strong>(2) Occasional support with the transaction process</strong> (e.g. commenting of transactional documents, legal advice during different stages of the transaction) <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided. Any offered hourly rate will be valid for 12 months from the date of the Lexify Contract or until the transaction has been closed or abandoned, whichever is sooner.</i></label>
+					<br>
+					<label><strong>(3) Legal due diligence regarding the target</strong>; reporting of findings with <strong>short form ”red flag” LDD report</strong> <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<br>
+					<label><strong>(4) Legal due diligence regarding the target</strong>; reporting of findings with <strong>long form LDD report</strong> (comprehensive review of all legal matters related to the target, not only identified ”red flag” issues) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<br>
+					<hr>
+					<label>Who can make you an offer?</label>
+					{{ form.offerMaker }}
+					<br>
+					<hr>
+					<label>How do you want to be invoiced?</label>
+					{{ form.invoiceType }}
+					<br>
+					<hr>
+					<label>What languages are needed for the performance of the work?: </label>
+					<input type="checkbox" name="language" value="English" id="langEng">
+					<label for="langEng">English</label>
+					<input type="checkbox" name="language" value="Finnish" id="langFin">
+					<label for="langFin">Finnish</label>
+					<input type="checkbox" name="language" value="Swedish" id="langSwe">
+					<label for="langSwe">Swedish</label>
+					<input type="checkbox" name="language" value="German" id="langGer">
+					<label for="langGer">German</label>
+					<input type="checkbox" name="language" value="French" id="langFr">
+					<label for="langFr">French</label>
+					<br>
+					<hr>
+					<label>By when do you need offers from interested service providers?</label>
+					{{ form.b2bDate }}
+					<br>
+					<hr>
+					<label>Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					<br>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview"/>
+					<input type="submit" name="submit" id="submit "value="Submit"/>
+					<input type="reset" name="reset" value="Clear"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of your Lexify Request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}

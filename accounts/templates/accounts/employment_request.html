@@ -1,0 +1,203 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type= "text/javascript">
+		$(document).ready( function() 
+		{
+			$('#preview').on('click', function(e) {
+				e.preventDefault();
+				preview();
+			});
+		});
+
+		function preview()
+		{
+			var offType = $('#id_legalOffers option:selected').val();
+			var offTypeLabel = "Type of offer wanted: ";
+			var offTypeData = '<p>' + offTypeLabel + ' ' + offType + '</p>';
+
+			var legHours = $('#id_legalHours option:selected').val();
+			var legHoursLabel = "Monthly hours of legal advice needed: ";
+			var legHoursData = '<p>' + legHoursLabel + legHours + '</p>';
+
+			var legMonths = $('#id_legalMonths option:selected').val();
+			var legMonthsLabel = "Price valid for: ";
+			var legMonthsData = '<p>' + legMonthsLabel + ' ' + legMonths + ' months from contract date' +'</p>';
+
+			var legAreaCheckboxes = $('input[type="checkbox"]:checked').map(function() {return $(this).val();}).get().join(', ');
+			document.body.append(legAreaCheckboxes);
+			var legAreaLabel = "Areas of law help is needed on: ";
+			var legAreaData = '<p>' + legAreaLabel + ' ' + legAreaCheckboxes + '</p>';
+
+			var title = $('input[name="title"]').val();
+			var titleLabel = "Title of the request: ";
+			var titleData = '<p><strong>' + title + '</strong></p>';
+
+			var data = titleData + offTypeData + legHoursData + legMonthsData + legAreaData;
+
+			$('#preview_data').html('');
+	        $('#preview_data').append(data);
+	        $('#preview_data').dialog({
+	            resizable: false,
+	            modal: true,
+	            buttons: 
+	            {
+	                'Submit': function() 
+	                {
+	                    //submit the form
+	                    $(this).dialog("close");
+	                },
+	                Cancel: function() 
+	                {
+	                    $(this).dialog("close");
+					}
+				}
+			});
+		}
+	</script>
+
+	<style type="text/css">
+		.tab { margin-left: 40px; }
+	</style>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Static Example</title>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+	<!-- XDSoft DateTimePicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<h5>What do you need?:</h5>
+					<br>
+					<input type="radio" name="employment_help" value="Employment contract template" id="employment_template">
+					<label for="employment_template">(I need a contract template for my business)What kind of a contract template? (you can choose more than one) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
+					<div>
+						<input type="checkbox" name="employment_conTemplate" value="Employment Contract (Operative)" id="employment_operative">
+						<label for="employment_operative">Employment Contract (Operative)</label><br>
+						<input type="checkbox" name="employment_conTemplate" value="Employment Contract (Staff)" id="employment_staff">
+						<label for="employment_staff">Employment Contract (Staff)</label><br>
+						<input type="checkbox" name="employment_conTemplate" value="Employment Contract (Executive)" id="employment_executive">
+						<label for="employment_executive">Employment Contract (Executive)</label><br>
+						<input type="checkbox" name="employment_conTemplate" value="Managing Director Contract" id="employment_director">
+						<label for="employment_director">Managing Director Contract</label><br>
+						<input type="checkbox" name="employment_conTemplate" value="Mutual Termination Contract" id="employment_termination">
+						<label for="employment_termination">Mutual Termination Contract</label><br>
+						<label>Describe the position and tasks of the employee(s) with a few sentences</label>
+						<br>
+						{{ form.employmentTemplate }}
+					</div>
+					<br>
+					<hr>
+					<label>Any other background information you would want to provide to Lexify legal service providers?:</label>
+					<br>
+					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
+					<br>
+					{{ form.otherInfo }}
+					<br>
+					<hr>
+					<label>Who can make you an offer?</label>
+					{{ form.offerMaker }}
+					<br>
+					<hr>
+					<label>How do you want to be invoiced?</label>
+					{{ form.invoiceType }}
+					<br>
+					<hr>
+					<label>What languages are needed for the performance of the work?: </label>
+					<input type="checkbox" name="language" value="English" id="langEng">
+					<label for="langEng">English</label>
+					<input type="checkbox" name="language" value="Finnish" id="langFin">
+					<label for="langFin">Finnish</label>
+					<input type="checkbox" name="language" value="Swedish" id="langSwe">
+					<label for="langSwe">Swedish</label>
+					<input type="checkbox" name="language" value="German" id="langGer">
+					<label for="langGer">German</label>
+					<input type="checkbox" name="language" value="French" id="langFr">
+					<label for="langFr">French</label>
+					<br>
+					<hr>
+					<label>By when do you need offers from interested service providers?</label>
+					{{ form.b2bDate }}
+					<br>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					<hr>
+					<h5>OR</h5>
+					<hr>
+					<br>
+					<input type="radio" name="employment_help" value="Negotiating a contract" id="employment_negotiate">
+					<label for="employment_negotiate">(I need help with negotiating a contract with an employee or executive) What type of contract will be negotiated? <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i></label><br>
+					<div class="tab">
+						<label>What type of contract will be negotiated?</label>
+						<br>
+						{{ form.employmentContract }}
+						<br>
+						<label>Describe the position and tasks of the employee(s) with a few sentences</label>
+						<br>
+						{{ form.employmentPos }}
+					</div>
+					<br>
+					<hr>
+					<h5>OR</h5>
+					<hr>
+					<br>
+					<input type="radio" name="employment_help" value="Other employment related template(s)" id="employment_other">
+					<label for="employment_other">(I need other employment related document template(s) for my business)  <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
+					<div class="tab">
+						<label>Which template(s) do you need? You can choose more than one.</label>
+						<br>
+						<input type="checkbox" name="employment_othTemplate" value="Written Warning" id="employment_warning">
+						<label for="employment_warning">Written Warning</label><br>
+						<input type="checkbox" name="employment_othTemplate" value="Termination Notice" id="employment_termNotice">
+						<label for="employment_termNotice">Termination Notice</label><br>
+						<input type="checkbox" name="employment_othTemplate" value="YT-menettelydokkarit" id="employment_ytMenDok">
+						<label for="employment_ytMenDok">YT-menettelydokkarit</label><br>
+						<input type="checkbox" name="employment_othTemplate" value="Muuta" id="employment_other">
+						<label for="employment_ytMenDok">Muuta?</label><br>
+					</div>
+					<hr>
+					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
+					{{ form.title }}
+					<br>
+					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
+					<hr>
+					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
+					<input type="submit" name="submit" id="submit "value="Submit  your Lexify Request"/>
+					<input type="reset" name="reset" value="Clear All"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card card-body">
+				<h5>Preview of request</h5>
+				<div id="preview_data" name="preview_data" title="Preview request form"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+{% endblock %}
