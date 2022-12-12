@@ -70,6 +70,12 @@
 			});
 		}
 	</script>
+
+	<style type="text/css">
+		input[type="radio"]{
+			vertical-align: baseline;
+		}
+	</style>
 	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -93,13 +99,11 @@
 				<form action="" method="POST">
 					{% csrf_token %}
 					<h5>What kind of help do you need?:</h5>
-					<br>
-					<input type="radio" name="b2c_help" value="I need a sales contract template for my B2C business" id="b2ccontract_template">
-					<label for="b2ccontract_template">I need a sales contract template for my B2C business <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
-					<input type="radio" name="b2c_help" value="I need a legal review of the comments made by a customer on my contract template" id="b2ccontract_comments">
-					<label for="b2ccontract_comments">I need a legal review of the comments made by a customer on my contract template <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
-					<input type="radio" name="b2c_help" value="I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds" id="b2ccontract_lawyer">
-					<label for="b2ccontract_lawyer">I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
+					<label><input type="radio" name="b2c_help" value="I need a sales contract template for my B2C business" id="b2ccontract_template"> I need a sales contract template for my B2C business <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
+					
+					<label><input type="radio" name="b2c_help" value="I need a legal review of the comments made by a customer on my contract template" id="b2ccontract_comments"> I need a legal review of the comments made by a customer on my contract template <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
+					
+					<label><input type="radio" name="b2c_help" value="I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds" id="b2ccontract_lawyer"> I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
 					<hr>
 					<label for="{{ form.note.id_for_label }}">Describe your relevant line of business briefly with a few sentences:</label>
 					<br>

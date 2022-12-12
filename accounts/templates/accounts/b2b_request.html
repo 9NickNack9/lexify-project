@@ -70,6 +70,12 @@
 			});
 		}
 	</script>
+
+	<style type="text/css">
+		input[type="radio"]{
+			vertical-align: baseline;
+		}
+	</style>
 	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -92,14 +98,11 @@
 				<form action="" method="POST">
 					{% csrf_token %}
 					<h5>What kind of help do you need?:</h5>
-					<input type="radio" name="b2b_help" value="I need a sales contract template for my B2B business" id="b2bcontract_template">
-					<label for="b2bcontract_template">I need a sales contract template for my B2B business <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
+					<label> <input type="radio" name="b2b_help" value="I need a sales contract template for my B2B business" id="b2bcontract_template"> I need a sales contract template for my B2B business <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
 					<br>
-					<input type="radio" name="b2b_help" value="I need legal comments on a contract template sent by the customer" id="b2bcontract_comments">
-					<label for="b2bcontract_comments">I need legal comments on a contract template sent by the customer <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
+					<label><input type="radio" name="b2b_help" value="I need legal comments on a contract template sent by the customer" id="b2bcontract_comments"> I need legal comments on a contract template sent by the customer <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
 					<br>
-					<input type="radio" name="b2b_help" value="I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds" id="b2bcontract_lawyer">
-					<label for="b2bcontract_lawyer">I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label>
+					<label><input type="radio" name="b2b_help" value="I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds" id="b2bcontract_lawyer"> I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label>
 					<br>
 					<hr>
 					<label for="{{ form.note.id_for_label }}">Describe your relevant line of business briefly with a few sentences:</label>

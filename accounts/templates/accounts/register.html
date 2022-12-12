@@ -90,9 +90,39 @@
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							{{form.first_name}}
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							{{form.last_name}}
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
 							</div>
 							{{form.email}}
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-users"></i></span>
+							</div>
+							<input type="text" name="company" id="company">
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-users"></i></span>
+							</div>
+							<input type="text" name="company_id" id="company_id">
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-phone-volume"></i></span>
+							</div>
+							<input type="text" name="phone" id="phone">
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
@@ -134,9 +164,14 @@
 		//Query All input fields
 		var form_fields = document.getElementsByTagName('input')
 		form_fields[1].placeholder='Username..';
-		form_fields[2].placeholder='Email..';
-		form_fields[3].placeholder='Enter password...';
-		form_fields[4].placeholder='Re-enter Password...';
+		form_fields[2].placeholder='First name...';
+		form_fields[3].placeholder='Last name...';
+		form_fields[4].placeholder='Email...';
+		form_fields[5].placeholder='Company name...';
+		form_fields[6].placeholder='Company id...';
+		form_fields[7].placeholder='Phone number...';
+		form_fields[8].placeholder='Enter password...';
+		form_fields[9].placeholder='Re-enter Password...';
 
 
 		for (var field in form_fields){	

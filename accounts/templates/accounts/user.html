@@ -1,17 +1,59 @@
 {%  extends 'accounts/main.html' %}
 
 {% block content %}
-<h1>My contact information</h1>
+
+<style type="text/css">
+	.title{
+		color:#10999f;
+		-webkit-text-stroke-width: 1px;
+		-webkit-text-stroke-color: black;
+	}
+</style>
+
+<h1 class="title">My Lexify Account</h1>
 
 <div class="row">
-
 	<div class="col-md">
 		<div class="card card-body">
-			<p>Username: {{user.username}}</p>
-			<p>Email: {{user.email}}</p>
+			<form method="POST" action="">
+				<h3>My Contact Information</h3>
+				<p>Company name: <input type="text" value={{customer.company}} size="30" style="margin-left: 107px;"></p>
+				<p>Company's Finnish Business ID: <input type="text" value={{customer.company_id}} size="30" style="margin-left: 2px;"></p>
+				<p>Company Street Address: <input type="text" value={{customer.company_id}} size="30" style="margin-left: 44px;"></p>
+				<p>Contact Person First Name: <input type="text" value={{customer.firstname}} size="30" style="margin-left: 31px;"></p>
+				<p>Contact Person Last Name: <input type="text" value={{customer.lastname}} size="30" style="margin-left: 33px;"></p>
+				<p>Contact Person Phone Number: <input type="text" value={{customer.phone}} size="30"></p>
+				<p>Contact Person Email: <input type="text" value={{customer.email}} size="30" style="margin-left: 69px;"></p>
+				<!--
+				<p>Username: {{customer.name}}</p>
+				<p>First Name: {{customer.firstname}}</p>
+				<p>Last Name: {{customer.lastname}}</p>
+				<p>Phone Number: {{customer.phone}}</p>
+				<p>Company: {{customer.company}}</p>
+				<p>Company ID: {{customer.company_id}}</p>
+				<p>Email: {{customer.email}}</p>-->
+				<p><strong>NOTE: </strong><i>Your above contact information will automatically be used as your contact details for any Lexify Contract you may enter into with Lexify Service Providers.</i></p>
+				<p>Username: {{customer.name}}</p>
+				<p>Password: </p>
+				<input type="submit" name="save" id="save" value="Save Contact Information">
+			</form>
 		</div>
 	</div>
-
+</div>
+<br>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<h3>Blocked Service Providers</h3>
+			<p>Have you had a negative experience with a specific Lexify Service Provider? Don't worry - you can block that LSP from sending you any further Lexify Offers. Simply enter the name of the LSP in the below search field, click "Find LSP", highlight the relevant LSP and select "Block LSP". You will then receive no further offers form that LSP. You can also unblock any previously blocked LSP. Just type in the LSP's name, click "Find LSP", highlight the LSP and select "Unblock LSP".</p>
+			<div>
+				<input type="text" name="" placeholder="Find LSP by Name"><br><br>
+				<input type="button" name="find" value="Find LSP">
+				<input type="button" name="block" value="Block LSP">
+				<input type="button" name="unblock" value="Unblock LSP">
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock content %}

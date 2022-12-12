@@ -1,11 +1,33 @@
 {% extends 'accounts/main.html' %}
 
 {% block content %}
+
+<style>
+	.timer{
+	/*background-color: #dc3545;*/
+	color: #dc3545;
+	border-radius: 5px;
+	padding: 5px;
+	}
+
+	table {
+		display: table;
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	th,td {
+		display: table-cell;
+		text-align: center;
+	}
+</style>
+
+
 <div class="row">
 	<div class="col-md-12">
 		<br>
 		<h5>My Lexify Requests</h5>
-		<div class="card card-body">		
+		<div class="card card-body">
 			<table class="table table-sm">
 				<tr>
 					<th>Lexify Request Title</th>
@@ -20,8 +42,8 @@
 					<tr>
 						<td>{{req.title}}</td>
 						<td>{{req.date_created}}</td>
-						<td></td>
-						<td></td>
+						<td class="timer"><b>{{req.b2bDate|timeuntil}}</b></td>
+						<td>0</td><!--{{contracts.count}}-->
 						<td><a class="btn btn-sm btn-info" href="{% url 'update_request' req.id %}">Update</a></td>
 						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_request' req.id %}">Delete</a></td>
 					</tr>

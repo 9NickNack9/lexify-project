@@ -1,0 +1,42 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+<style type="text/css">
+	
+	.button{
+  display: inline-block;
+  background: #10999f;
+  border-radius: 4px;
+  font-family: "arial-black";
+  font-size: 14px;
+  color: #FFF;
+  padding: 8px 12px;
+  cursor: pointer;   
+}
+
+</style>
+
+<!DOCTYPE html>
+<html>
+    
+<head>
+</head>
+<body>
+	<h1>Give Feedback to Lexify</h1>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card card-body">
+				<form action="" method="get" enctype="text/plain">
+					<div>
+						<label>Please let us know what you like about Lexify and what we could do better. Are there any features you would to like see added to Lexify? Your feedback helps us improve and develop Lexify!</label>
+						<br>
+						<a href="mailto:niklas.kantele@hotmail.com?subject=My Feedback to Lexify" class="button">Give Feedback</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+{% endblock content %}

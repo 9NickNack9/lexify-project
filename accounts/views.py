@@ -17,6 +17,7 @@ from .forms import *
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
 
+
 @unauthenticated_user
 def registerPage(request):
 
@@ -32,8 +33,13 @@ def registerPage(request):
             Customer.objects.create(
                 user=user,
                 name=user.username,
+                firstname=form.cleaned_data.get('first_name'),
+                lastname=form.cleaned_data.get('last_name'),
+                email=form.cleaned_data.get('email'),
+                company=request.POST['company'],
+                company_id=request.POST['company_id'],
+                phone=request.POST['phone'],
                 )
-
             messages.success(request, 'Account was created for ' + username)
 
             return redirect('login')
@@ -86,6 +92,13 @@ def offers(request):
     """
     context = {}
     return render(request, 'accounts/offers.html', context)
+
+@login_required(login_url='login')
+def feedback(request):
+
+    context = {}
+
+    return render(request, 'accounts/feedback.html', context)
 
 
 @login_required(login_url='login')
@@ -520,7 +533,15 @@ def home(request):
 @login_required(login_url='login')
 #@allowed_users(allowed_roles=['customer'])
 def userPage(request):
-    context = {}
+    user = request.user
+    customer = Customer.objects.get(name=user.username)
+    form = RequestForm(instance=customer)
+    if request.method == 'POST':
+        form = RequestForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('user-page')
+    context = {'form':form, 'customer':customer}
     return render(request, 'accounts/user.html', context)
 
 """
