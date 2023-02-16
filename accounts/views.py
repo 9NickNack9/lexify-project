@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -74,12 +75,22 @@ def logoutUser(request):
 
 def contracts(request):
     requests = Request.objects.all()
+    employmentRequests = EmploymentTemplateRequest.objects.all()
     #contracts = Contract.objects.all()
-    context = {'requests': requests}
+    context = {'requests': requests, 'emp' : employmentRequests}
     return render(request, 'accounts/contracts.html', context)
+
+def makeOffer(request, pk):
+    req = EmploymentTemplateRequest.objects.get(id=pk)
+    context = {'request': req}
+    return render(request, 'accounts/make_offer.html', context)
 
 
 def offers(request):
+    context = {}
+    return render(request, 'accounts/offers.html', context)
+
+def providerOffers(request):
     """
     offers = Offer.objects.all()
     customers = Customer.objects.all()
@@ -90,13 +101,58 @@ def offers(request):
     accepted = offers.filter(status='Accepted').count()
     pending = offers.filter(status='Pending').count()
     """
-    context = {}
-    return render(request, 'accounts/offers.html', context)
+    requests = Request.objects.all()
+    context = {'requests': requests}
+    return render(request, 'accounts/provider_offers.html', context)
+
+def providerRequests(request):
+    """
+    offers = Offer.objects.all()
+    customers = Customer.objects.all()
+
+    total_customers = customers.count()
+
+    total_offers = offers.count()
+    accepted = offers.filter(status='Accepted').count()
+    pending = offers.filter(status='Pending').count()
+    """
+    
+    requests = Request.objects.all()
+    b2b = B2BRequest.objects.all()
+    b2c = B2CRequest.objects.all()
+    employmentRequests = EmploymentTemplateRequest.objects.all()
+    empNegRequests = EmploymentNegotiationRequest.objects.all()
+    empDocRequests = EmploymentDocumentRequest.objects.all()
+    RealEstatePurchaseRequests = RealEstatePurchaseRequest.objects.all()
+    RealEstateLeasebackRequests = RealEstateLeasebackRequest.objects.all()
+    RealEstateLeaseRequests = RealEstateLeaseRequest.objects.all()
+    RealEstateEaseRequests = RealEstateEasementRequest.objects.all()
+    RealEstateConstRequests = RealEstateConstructionRequest.objects.all()
+    sourcingBusTempRequests = sourcingBusTemplateRequest.objects.all()
+    sourcingSupTempRequests = sourcingSupTemplateRequest.objects.all()
+    sourcingSupAgRequests = sourcingSupAgreementRequest.objects.all()
+    legalRequests = legalRequest.objects.all()
+    disputeCourtRequests = disputeCourtRequest.objects.all()
+    disputeArbiRequests = disputeArbitrationRequest.objects.all()
+    disputeSettRequests = disputeSettlementRequest.objects.all()
+    mergerRequests = mergerRequest.objects.all()
+    corporateRequests = corporateRequest.objects.all()
+    dataRequests = dataRequest.objects.all()
+    trainRequests = trainingRequest.objects.all()
+    context = {'requests': requests, 'emp' : employmentRequests, 'b2b' : b2b, 'b2c' : b2c, 'empNegRequests' : empNegRequests, 
+    'empDocRequests' : empDocRequests, 'RealEstatePurchaseRequests' : RealEstatePurchaseRequests, 'RealEstateLeasebackRequests' : RealEstateLeasebackRequests, 
+    'RealEstateLeaseRequests' : RealEstateLeaseRequests, 'RealEstateEaseRequests' : RealEstateEaseRequests, 'RealEstateConstRequests' : RealEstateConstRequests, 
+    'sourcingBusTempRequests' : sourcingBusTempRequests, 'sourcingSupTempRequests' : sourcingSupTempRequests, 'sourcingSupAgRequests' : sourcingSupAgRequests, 
+    'legalRequests' : legalRequests, 'disputeCourtRequests' : disputeCourtRequests, 'disputeArbiRequests' : disputeArbiRequests, 'disputeSettRequests' : disputeSettRequests, 
+    'mergerRequests' : employmentRequests, 'mergerRequests' : employmentRequests, 'corporateRequests' : corporateRequests, 'dataRequests' : dataRequests, 'trainRequests' : trainRequests}
+    return render(request, 'accounts/provider_requests.html', context)
 
 @login_required(login_url='login')
 def feedback(request):
 
-    context = {}
+    user = request.user
+    customer = Customer.objects.get(name=user.username)
+    context = {'customer': customer}
 
     return render(request, 'accounts/feedback.html', context)
 
@@ -123,9 +179,25 @@ def contractRequest(request):
 
 @login_required(login_url='login')
 def b2bRequest(request):
-    form = RequestForm()
+    form = B2BRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        template = datadict.get('b2b_help')
+        templist = str(', '.join(template))
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'b2b_help': templist,
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        'note': datadict.get('note'),
+        }
+        form = B2BRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -136,9 +208,25 @@ def b2bRequest(request):
 
 @login_required(login_url='login')
 def b2cRequest(request):
-    form = RequestForm()
+    form = B2CRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        template = datadict.get('b2b_help')
+        templist = str(', '.join(template))
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'b2b_help': templist,
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        'note': datadict.get('note'),
+        }
+        form = B2CRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -161,21 +249,29 @@ def employmentRequest(request):
 
 @login_required(login_url='login')
 def employmentSelection(request):
-    form = RequestForm()
-    if request.method == 'POST':
-        form = RequestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('contracts')
-    context = {'form':form}
-
-    return render(request, 'accounts/employment_selection.html', context)
+    return render(request, 'accounts/employment_selection.html')
 
 @login_required(login_url='login')
 def employmentTemplate(request):
-    form = RequestForm()
+    form = EmploymentTemplateRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        template = datadict.get('employment_conTemplate')
+        templist = str(', '.join(template))
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'employment_conTemplate': templist,
+        'employmentTemplate' : datadict.get('employmentTemplate'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = EmploymentTemplateRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -185,9 +281,23 @@ def employmentTemplate(request):
 
 @login_required(login_url='login')
 def employmentNegotiation(request):
-    form = RequestForm()
+    form = EmploymentNegotiationRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'employmentContract' : datadict.get('employmentContract'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        'employmentPos': datadict.get('employmentPos'),
+        }
+        form = EmploymentNegotiationRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -197,9 +307,24 @@ def employmentNegotiation(request):
 
 @login_required(login_url='login')
 def employmentDocuments(request):
-    form = RequestForm()
+    form = EmploymentDocumentRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        template = datadict.get('employment_docTemplate')
+        templist = str(', '.join(template))
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'employment_docTemplate': templist,
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = EmploymentDocumentRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -234,9 +359,27 @@ def realestateSelection(request):
 
 @login_required(login_url='login')
 def realestatePurchase(request):
-    form = RequestForm()
+    form = RealEstatePurchaseRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'realestateAgreement' : datadict.get('realestateAgreement'),
+        'agreementBuyer' : datadict.get('agreementBuyer'),
+        'agreementDescription' : datadict.get('agreementDescription'),
+        'agreementRange' : datadict.get('agreementRange'),
+        'agreementInspection' : datadict.get('agreementInspection'),
+        'realSalePurchase' : datadict.get('realSalePurchase'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = RealEstatePurchaseRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -246,9 +389,26 @@ def realestatePurchase(request):
 
 @login_required(login_url='login')
 def realestateLeaseback(request):
-    form = RequestForm()
+    form = RealEstateLeasebackRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'leasebackSeller' : datadict.get('leasebackSeller'),
+        'leasebackDescription' : datadict.get('leasebackDescription'),
+        'leasebackRange' : datadict.get('leasebackRange'),
+        'leasebackInspection' : datadict.get('leasebackInspection'),
+        'realLeaseBack' : datadict.get('realLeaseBack'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = RealEstateLeasebackRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -258,9 +418,26 @@ def realestateLeaseback(request):
 
 @login_required(login_url='login')
 def realestateLease(request):
-    form = RequestForm()
+    form = RealEstateLeaseRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'realLease' : datadict.get('realLease'),
+        'leaseAgreement' : datadict.get('leaseAgreement'),
+        'leaseRole' : datadict.get('leaseRole'),
+        'leaseDescription' : datadict.get('leaseDescription'),
+        'leaseRange' : datadict.get('leaseRange'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = RealEstateLeaseRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -270,9 +447,24 @@ def realestateLease(request):
 
 @login_required(login_url='login')
 def realestateEasement(request):
-    form = RequestForm()
+    form = RealEstateEasementRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'constructionDescription' : datadict.get('constructionDescription'),
+        'easementProperty' : datadict.get('easementProperty'),
+        'easementSupport' : datadict.get('easementSupport'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = RealEstateEasementRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -282,9 +474,25 @@ def realestateEasement(request):
 
 @login_required(login_url='login')
 def realestateConstruction(request):
-    form = RequestForm()
+    form = RealEstateConstructionRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'realConstruction' : datadict.get('realConstruction'),
+        'constructionAgreement' : datadict.get('constructionAgreement'),
+        'constructionDescription' : datadict.get('constructionDescription'),
+        'constructionPrice' : datadict.get('constructionPrice'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = RealEstateConstructionRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -319,9 +527,24 @@ def sourcingSelection(request):
 
 @login_required(login_url='login')
 def sourcingBusTemplate(request):
-    form = RequestForm()
+    form = sourcingBusTemplateRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'sourcingTemplate' : datadict.get('sourcingTemplate'),
+        'sourcingGeneric' : datadict.get('sourcingGeneric'),
+        'sourcingCustomized' : datadict.get('sourcingCustomized'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = sourcingBusTemplateRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -331,9 +554,22 @@ def sourcingBusTemplate(request):
 
 @login_required(login_url='login')
 def sourcingSupTemplate(request):
-    form = RequestForm()
+    form = sourcingSupTemplateRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'sourcingComments' : datadict.get('sourcingComments'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = sourcingSupTemplateRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -343,9 +579,23 @@ def sourcingSupTemplate(request):
 
 @login_required(login_url='login')
 def sourcingSupAgreement(request):
-    form = RequestForm()
+    form = sourcingSupAgreementRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'sourcingLawyer' : datadict.get('sourcingLawyer'),
+        'sourcingType' : datadict.get('sourcingType'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = sourcingSupAgreementRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -355,10 +605,28 @@ def sourcingSupAgreement(request):
 
 
 @login_required(login_url='login')
-def legalRequest(request):
-    form = RequestForm()
+def legal(request):
+    form = legalRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        template = datadict.get('employment_docTemplate')
+        templist = str(', '.join(template))
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'legal_area' : templist,
+        'legalMonths' : datadict.get('legalMonths'),
+        'legalHours' : datadict.get('legalHours'),
+        'legalOffers' : datadict.get('legalOffers'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = legalRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -369,9 +637,24 @@ def legalRequest(request):
 
 @login_required(login_url='login')
 def disputeRequest(request):
-    form = RequestForm()
+    form = disputeCourtRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'dispRole' : datadict.get('dispRole'),
+        'courtArea' : datadict.get('courtArea'),
+        'dispDescription' : datadict.get('dispDescription'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = disputeCourtRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -379,11 +662,12 @@ def disputeRequest(request):
 
     return render(request, 'accounts/dispute_request.html', context)
 
+
 @login_required(login_url='login')
 def disputeSelection(request):
     form = RequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        form = RequestForm()
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -393,9 +677,23 @@ def disputeSelection(request):
 
 @login_required(login_url='login')
 def disputeCourt(request):
-    form = RequestForm()
+    form = disputeCourtRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'courtArea' : datadict.get('courtArea'),
+        'dispDescription' : datadict.get('dispDescription'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = disputeCourtRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -405,9 +703,23 @@ def disputeCourt(request):
 
 @login_required(login_url='login')
 def disputeArbitration(request):
-    form = RequestForm()
+    form = disputeArbitrationRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'arbiArea' : datadict.get('arbiArea'),
+        'dispDescription' : datadict.get('dispDescription'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = disputeArbitrationRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -417,9 +729,23 @@ def disputeArbitration(request):
 
 @login_required(login_url='login')
 def disputeSettlement(request):
-    form = RequestForm()
+    form = disputeSettlementRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'settlementArea' : datadict.get('settlementArea'),
+        'dispDescription' : datadict.get('dispDescription'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = disputeSettlementRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -429,10 +755,30 @@ def disputeSettlement(request):
 
 
 @login_required(login_url='login')
-def mergerRequest(request):
-    form = RequestForm()
+def merger(request):
+    form = mergerRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'sellOrBuy' : datadict.get('sellOrBuy'),
+        'mergerType' : datadict.get('mergerType'),
+        'mergerCompany' : datadict.get('mergerCompany'),
+        'mergerOtherCompany' : datadict.get('mergerOtherCompany'),
+        'mergerTarget' : datadict.get('mergerTarget'),
+        'mergerBusinessLine' : datadict.get('mergerBusinessLine'),
+        'mergerRange' : datadict.get('mergerRange'),
+        'mergerArea' : datadict.get('mergerArea'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = mergerRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -442,10 +788,23 @@ def mergerRequest(request):
 
 
 @login_required(login_url='login')
-def corporateRequest(request):
-    form = RequestForm()
+def corporate(request):
+    form = corporateRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'corpCompany' : datadict.get('corpCompany'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceTypeRunning'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = corporateRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -455,10 +814,27 @@ def corporateRequest(request):
 
 
 @login_required(login_url='login')
-def dataRequest(request):
-    form = RequestForm()
+def dataPrivacy(request):
+    form = dataRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'privacyOptions' : datadict.get('privacyOptions'),
+        'privacyReview' : datadict.get('privacyReview'),
+        'privacyGDPR' : datadict.get('privacyGDPR'),
+        'privacyBusinessLine' : datadict.get('privacyBusinessLine'),
+        'privacyEmployeeCount' : datadict.get('privacyEmployeeCount'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'invoiceType' : datadict.get('invoiceType'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = dataRequestForm(data)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -468,10 +844,28 @@ def dataRequest(request):
 
 
 @login_required(login_url='login')
-def trainingRequest(request):
-    form = RequestForm()
+def training(request):
+    form = trainingRequestForm()
     if request.method == 'POST':
-        form = RequestForm(request.POST)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        lang = datadict.get('language')
+        langlist = str(', '.join(lang))
+        data = {
+        'legalTopic' : datadict.get('legalTopic'),
+        'trainingDuration' : datadict.get('trainingDuration'),
+        'dateConfirm' : datadict.get('dateConfirm'),
+        'trainingDate' : datadict.get('trainingDate'),
+        'trainingTime' : datadict.get('trainingTime'),
+        'trainingPlace' : datadict.get('trainingPlace'),
+        'trainingPlaceInfo' : datadict.get('trainingPlaceInfo'),
+        'otherInfo' : datadict.get('otherInfo'),
+        'offerMaker' : datadict.get('offerMaker'),
+        'language' : langlist,
+        'b2bDate' : datadict.get('b2bDate'),
+        'title' : datadict.get('title'),
+        }
+        form = trainingRequestForm(data)
         print(form.errors)
         if form.is_valid():
             print('valid')
@@ -529,10 +923,32 @@ def home(request):
     context = {}
     return render(request, 'accounts/dashboard.html', context)
 
+@login_required(login_url='login')
+def providerDashboard(request):
+    
+    context = {}
+    return render(request, 'accounts/provider_dashboard.html', context)
+
 
 @login_required(login_url='login')
 #@allowed_users(allowed_roles=['customer'])
 def userPage(request):
+    user = request.user
+    customer = Customer.objects.get(name=user.username)
+    allCustomers = Customer.objects.all()
+    form = RequestForm(instance=customer)
+    if request.method == 'POST':
+        form = RequestForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('user-page')
+    context = {'form':form, 'customer':customer, 'customerList': allCustomers}
+    return render(request, 'accounts/user.html', context)
+
+
+@login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer'])
+def providerUser(request):
     user = request.user
     customer = Customer.objects.get(name=user.username)
     form = RequestForm(instance=customer)
@@ -542,7 +958,7 @@ def userPage(request):
             form.save()
             return redirect('user-page')
     context = {'form':form, 'customer':customer}
-    return render(request, 'accounts/user.html', context)
+    return render(request, 'accounts/provider_user.html', context)
 
 """
 @login_required(login_url='login')

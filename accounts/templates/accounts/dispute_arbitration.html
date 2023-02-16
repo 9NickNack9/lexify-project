@@ -19,10 +19,6 @@
 
 		function preview()
 		{
-			var dispRole = $('#id_dispRole').val();
-			var dispRoleLabel = "I am: ";
-			var dispRoleData = '<p>' + dispRoleLabel + dispRole + '</p>';
-
 			var supNature = $('#id_arbiArea').val();
 			var supNatureLabel = "Nature of the support needed: ";
 			var supNatureData = '<p>' + supNatureLabel + ' ' + supNature +'</p>';
@@ -63,7 +59,7 @@
 
 			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
 
-			var data = titleData + dispRoleData + supNatureData + dispDescData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
+			var data = titleData + supNatureData + dispDescData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
 
 
 			$('#preview_data').html('');
@@ -109,16 +105,11 @@
 			<div class="card card-body">
 				<form action="" method="POST">
 					{% csrf_token %}
-					<label>Are you... </label>
-					<br>
-					{{ form.dispRole }}
-					<br>
-					<hr>
 					<label>What kind of help do you need? (see info below):</label>
 					<br>
 					{{ form.arbiArea }}
 					<br>
-					<label><strong>(a) Holistic legal representation in arbitration proceedings </strong>(including e.g. drafting of legal briefs, representation in arbitration hearings, attorney-client communications) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<label><strong>(a) Legal representation in arbitration proceedings </strong>(including e.g. drafting of legal briefs, representation in arbitration hearings, attorney-client communications) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
 					<br>
 					<label><strong>(b) Occasional support with arbitration proceedings</strong> (e.g. commenting on legal briefs, periodic advice regarding legal strategy, etc.) <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided. Any offered hourly rate will be valid for 12 months from the date of the Lexify Contract or until the arbitration proceedings have ended, whichever is sooner.</i> </label>
 					<hr>

@@ -5,7 +5,7 @@
 <style type="text/css">
 	.title{
 		color:#10999f;
-		-webkit-text-stroke-width: 1px;
+		-webkit-text-stroke-width: 0.5px;
 		-webkit-text-stroke-color: black;
 	}
 </style>
@@ -32,7 +32,7 @@
 				<p>Company: {{customer.company}}</p>
 				<p>Company ID: {{customer.company_id}}</p>
 				<p>Email: {{customer.email}}</p>-->
-				<p><strong>NOTE: </strong><i>Your above contact information will automatically be used as your contact details for any Lexify Contract you may enter into with Lexify Service Providers.</i></p>
+				<p><strong>NOTE: </strong><i>The above contact information will automatically be used as your contact details for any Lexify Contract you may enter into with Lexify Service Providers.</i></p>
 				<p>Username: {{customer.name}}</p>
 				<p>Password: </p>
 				<input type="submit" name="save" id="save" value="Save Contact Information">
@@ -44,16 +44,22 @@
 <div class="row">
 	<div class="col-md">
 		<div class="card card-body">
-			<h3>Blocked Service Providers</h3>
-			<p>Have you had a negative experience with a specific Lexify Service Provider? Don't worry - you can block that LSP from sending you any further Lexify Offers. Simply enter the name of the LSP in the below search field, click "Find LSP", highlight the relevant LSP and select "Block LSP". You will then receive no further offers form that LSP. You can also unblock any previously blocked LSP. Just type in the LSP's name, click "Find LSP", highlight the LSP and select "Unblock LSP".</p>
+			<h3>Blocked Lexify Service Providers</h3>
+			<p>Have you had a negative experience with a specific Lexify Service Provider? Don't worry - you can block that LSP from sending you any further Lexify Offers. Simply enter the name of the LSP in the below search field, click "Find LSP", highlight the relevant LSP and select "Block LSP". You will then receive no further offers from that LSP. You can also unblock any previously blocked LSP. Just type in the LSP's name, click "Find LSP", highlight the LSP and select "Unblock LSP".</p>
 			<div>
 				<input type="text" name="" placeholder="Find LSP by Name"><br><br>
 				<input type="button" name="find" value="Find LSP">
 				<input type="button" name="block" value="Block LSP">
 				<input type="button" name="unblock" value="Unblock LSP">
+				<br>
+				<br>
+				<p><strong>LIST OF CURRENTLY BLOCKED LEXIFY SERVICE PROVIDERS</strong></p>
+				{% for cust in customerList %}
+					{{cust.name}}
+				{% endfor %}
+				<p><i>None</i></p>
 			</div>
 		</div>
 	</div>
 </div>
-
 {% endblock content %}

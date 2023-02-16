@@ -1,0 +1,75 @@
+{% extends 'accounts/providermain.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+<style>
+	.timer{
+	/*background-color: #dc3545;*/
+	color: #dc3545;
+	padding: 5px;
+	}
+
+	table {
+		display: table;
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	th,td {
+		display: table-cell;
+		text-align: center;
+	}
+
+	tr:hover{
+		background-color: grey;
+	}
+</style>
+
+
+<div class="row">
+	<div class="col-md-12">
+		<br>
+		<h5>My Lexify Offers</h5>
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Description of Work Needed</th>
+					<th>Client Name</th>
+					<th>Price offered</th>
+					<th>Time Until Deadline for Offers</th>
+					<th>Offer Status</th>
+					<th>Review Lexify Request</th>
+				</tr>
+
+				{% for req in requests %}
+					<tr>
+						<td>{{req.title}}</td>
+						<td>Name</td>
+						<td>0</td><!--{{contracts.count}}-->
+						<td class="timer"><b>{{req.b2bDate|timeuntil}}</b></td>
+						<td><label>Pending</label>/<label style="color:seagreen;">Contract Won</label>/<label style="color:red;">Contract Lost</label></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt"></a></td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<br>
+		<h5>My Lexify Contracts</h5>
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Description of Work</th>
+					<th>Client Name</th>
+					<th>Date Created</th>
+					<th>Copy of the Lexify Contract</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

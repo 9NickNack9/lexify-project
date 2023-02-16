@@ -15,12 +15,12 @@ urlpatterns = [
 
     path('request_selection/', views.requestSelection, name="request_selection"),
     path('contract_request/', views.contractRequest, name="contract_request"),
-    path('legal_request/', views.legalRequest, name="legal_request"),
+    path('legal_request/', views.legal, name="legal_request"),
     path('dispute_request/', views.disputeRequest, name="dispute_request"),
-    path('merger_request/', views.mergerRequest, name="merger_request"),
-    path('corporate_request/', views.corporateRequest, name="corporate_request"),
-    path('data_request/', views.dataRequest, name="data_request"),
-    path('training_request/', views.trainingRequest, name="training_request"),
+    path('merger_request/', views.merger, name="merger_request"),
+    path('corporate_request/', views.corporate, name="corporate_request"),
+    path('data_request/', views.dataPrivacy, name="data_request"),
+    path('training_request/', views.training, name="training_request"),
     path('b2b_request/', views.b2bRequest, name="b2b_request"),
     path('b2c_request/', views.b2cRequest, name="b2c_request"),
     path('employment_request/', views.employmentRequest, name="employment_request"),
@@ -52,4 +52,12 @@ urlpatterns = [
     path('update_request/<str:pk>/', views.updateRequest, name="update_request"),
     path('delete_request/<str:pk>/', views.deleteRequest, name="delete_request"),
     path('create_offer/', views.createOffer, name="create_offer"),
+
+    #Provider
+    path('provider/', views.providerDashboard, name='provider_dashboard'),
+    path('provider_offers/', views.providerOffers, name='provider_offers'),
+    path('provider_user/', views.providerUser, name='provider_user'),
+    path('provider_requests/', views.providerRequests, name='provider_requests'),
+
+    path('make_offer/<str:pk>/', views.makeOffer, name='make_offer'),
 ]

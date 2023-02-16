@@ -19,10 +19,6 @@
 
 		function preview()
 		{
-			var dispRole = $('#id_dispRole').val();
-			var dispRoleLabel = "I am: ";
-			var dispRoleData = '<p>' + dispRoleLabel + dispRole + '</p>';
-
 			var supNature = $('#id_courtArea').val();
 			var supNatureLabel = "Nature of the support needed: ";
 			var supNatureData = '<p>' + supNatureLabel + ' ' + supNature +'</p>';
@@ -39,12 +35,12 @@
 			var trainDateLabel = "Your offer must be submitted by: ";
 			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
 
-			if($('#id_courtArea').val() == 'Holistic legal representation in court proceedings (including e.g. drafting of legal briefs, representation in court hearings, attorney-client communications)')
+			if($('#id_courtArea').val() == 'Legal representation in court proceedings (including e.g. drafting of legal briefs, representation in court hearings, attorney-client communications)')
 			{
-				var invoiceType = "Lump sum fixed price for the entire work.";
+				var invoiceType = "Lump sum fixed price for the entire work in one court instance.";
 			}else if($('#id_courtArea').val() == 'Occasional support with court proceedings (e.g. commenting on legal briefs, periodic advice regarding legal strategy, etc.)')
 			{
-				var invoiceType = "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the court proceedings have ended, whichever is sooner.";
+				var invoiceType = "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the court proceedings have ended, whichever is sooner. The offered hourly rate covers proceedings in one court instance only.";
 			}
 			
 
@@ -63,7 +59,7 @@
 
 			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
 
-			var data = titleData + dispRoleData + supNatureData + dispDescData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
+			var data = titleData + supNatureData + dispDescData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
 
 
 			$('#preview_data').html('');
@@ -109,18 +105,13 @@
 			<div class="card card-body">
 				<form action="" method="POST">
 					{% csrf_token %}
-					<label>Are you... </label>
-					<br>
-					{{ form.dispRole }}
-					<br>
-					<hr>
 					<label>What kind of help do you need? (see info below):</label>
 					<br>
 					{{ form.courtArea }}
 					<br>
-					<label><strong>(a) Holistic legal representation in court proceedings </strong>(including e.g. drafting of legal briefs, representation in court hearings, attorney-client communications) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
+					<label><strong>(a) Legal representation in court proceedings </strong>(including e.g. drafting of legal briefs, representation in court hearings, attorney-client communications) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price and cover proceedings in one court instance only (i.e. possible later appeal proceedings in a higher court are not included in the offered price)</i></label>
 					<br>
-					<label><strong>(b) Occasional support with court proceedings</strong> (e.g. commenting on legal briefs, periodic advice regarding legal strategy, etc.) <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided. Any offered hourly rate will be valid for 12 months from the date of the Lexify Contract or until the court proceedings have ended, whichever is sooner.</i> </label>
+					<label><strong>(b) Occasional support with court proceedings</strong> (e.g. commenting on legal briefs, periodic advice regarding legal strategy, etc.) <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided. Any offered hourly rate will be valid for 12 months from the date of the Lexify Contract or until the court proceedings have ended, whichever is sooner. The offered hourly rate covers proceedings in one court instance only.</i> </label>
 					<hr>
 					<label>Please describe briefly the subject matter under dispute and the current status of the dispute (Are the parties still negotiating? Have court proceedings already been initiated by one party?) </label>
 					<br>

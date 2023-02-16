@@ -1,0 +1,66 @@
+{% extends 'accounts/providermain.html' %}
+{% load static %}
+{% block content %}
+
+<style type="text/css">
+	input[type="checkbox"]{
+		vertical-align: baseline;
+	}
+
+	.offerButton{
+		width: 250px;
+		color: #fff;
+	}
+
+	.offerButtonSubmit{
+		background-color: #11999e;
+		color: #fff;
+	}
+
+	.offerButtonExit{
+		background-color: red;
+		color: #fff;
+	}
+
+</style>
+
+<h3>Lexify Request by</h3>
+<br>
+<h5>I need help with HR contract templates</h5>
+<label>Description of the position and tasks of the employee(s): </label>
+{{request.employmentTemplate}}
+<br>
+<label>Other information: </label>
+{{request.otherInfo}}
+<br>
+<label>Your offer must be submitted by: </label>
+{{request.b2bDate}}
+<br>
+<label>How I wish to be invoiced: </label>
+{{request.invoiceType}}
+<br>
+<label>What kind of contract template is needed: </label>
+{% for temp in request.employment_conTemplate %}
+	{{temp}};
+{% endfor %}
+<br>
+<label>What languages are needed for the performance of the work: </label>
+{% for lang in request.language %}
+	{{lang}};
+{% endfor %}
+<br>
+<br>
+<label><i>The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.</i></label>
+<br>
+<hr>
+<h5>Submit your offer in response to the Lexify Request</h5>
+<label>Insert your offered price (VAT 0%)</label>
+<br>
+<input type="number" name="offer_price"> <label> €</label>
+<br>
+<label><input type="checkbox" name="confirmBox" required="required" class="confirm"><strong> By submitting an offer I accept that, provided mine is the winning offer, I automatically enter into a Lexify Contract with the Lexify Legal Service User who has submitted the Lexify Request, <br>and am thereby contractually bound to provide the legal services described in the Lexify Request for the price I have offered.</strong></label>
+<br>
+<button class="offerButton offerButtonSubmit">Submit Offer</button>
+<button class="offerButton offerButtonExit" href="{% url 'provider_requests'%}">Exit without submitting an offer</button>
+
+{% endblock %}

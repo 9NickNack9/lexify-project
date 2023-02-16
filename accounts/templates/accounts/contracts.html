@@ -48,6 +48,17 @@
 						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_request' req.id %}">Delete</a></td>
 					</tr>
 				{% endfor %}
+
+				{% for e in emp %}
+					<tr>
+						<td>{{e.title}}</td>
+						<td>{{e.date_created}}</td>
+						<td class="timer"><b>{{e.b2bDate|timeuntil}}</b></td>
+						<td>0</td><!--{{contracts.count}}-->
+						<td><a class="btn btn-sm btn-info">Update</a></td>
+						<td><a class="btn btn-sm btn-danger">Delete</a></td>
+					</tr>
+				{% endfor %}
 			</table>
 			<td><a class="btn btn-sm btn-info" href="{% url 'request_selection' %}">Create a new request</a></td>
 		</div>
