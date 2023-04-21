@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -17,6 +19,12 @@ from .forms import *
 #from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
+
+
+class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'accounts/change_password.html'
+    success_message = "Successfully Changed Your Password"
+    success_url = 'accounts/user.html'
 
 
 @unauthenticated_user
@@ -73,6 +81,7 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login')
 def contracts(request):
     requests = Request.objects.all()
     employmentRequests = EmploymentTemplateRequest.objects.all()
@@ -80,16 +89,18 @@ def contracts(request):
     context = {'requests': requests, 'emp' : employmentRequests}
     return render(request, 'accounts/contracts.html', context)
 
+@login_required(login_url='login')
 def makeOffer(request, pk):
     req = EmploymentTemplateRequest.objects.get(id=pk)
     context = {'request': req}
     return render(request, 'accounts/make_offer.html', context)
 
-
+@login_required(login_url='login')
 def offers(request):
     context = {}
     return render(request, 'accounts/offers.html', context)
 
+@login_required(login_url='login')
 def providerOffers(request):
     """
     offers = Offer.objects.all()
@@ -105,6 +116,7 @@ def providerOffers(request):
     context = {'requests': requests}
     return render(request, 'accounts/provider_offers.html', context)
 
+@login_required(login_url='login')
 def providerRequests(request):
     """
     offers = Offer.objects.all()
@@ -270,6 +282,7 @@ def employmentTemplate(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Lump sum fixed price for the entire work.",
         }
         form = EmploymentTemplateRequestForm(data)
         if form.is_valid():
@@ -610,7 +623,7 @@ def legal(request):
     if request.method == 'POST':
         q = request.POST
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
-        template = datadict.get('employment_docTemplate')
+        template = datadict.get('legal_area')
         templist = str(', '.join(template))
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
@@ -627,6 +640,7 @@ def legal(request):
         'title' : datadict.get('title'),
         }
         form = legalRequestForm(data)
+        print(form.errors)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -866,7 +880,6 @@ def training(request):
         'title' : datadict.get('title'),
         }
         form = trainingRequestForm(data)
-        print(form.errors)
         if form.is_valid():
             print('valid')
             form.save()
@@ -936,12 +949,61 @@ def userPage(request):
     user = request.user
     customer = Customer.objects.get(name=user.username)
     allCustomers = Customer.objects.all()
-    form = RequestForm(instance=customer)
     if request.method == 'POST':
-        form = RequestForm(request.POST, instance=customer)
+        q = request.POST
+        datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
+        if datadict.get("companyName") == "":
+            comp = customer.company
+        else:
+            comp = datadict.get("companyName")
+
+        if datadict.get("companyId") == "":
+            compId = customer.company_id
+        else:
+            compId = datadict.get("companyId")
+
+        if datadict.get("firstName") == "":
+            fname = customer.firstname
+        else:
+            fname = datadict.get("firstName")
+
+        if datadict.get("lastName") == "":
+            lname = customer.lastname
+        else:
+            lname = datadict.get("lastName")
+
+        if datadict.get("phoneNumber") == "":
+            pnum = customer.phone
+        else:
+            pnum = datadict.get("phoneNumber")
+
+        if datadict.get("eMail") == "":
+            mail = customer.email
+        else:
+            mail = datadict.get("eMail")
+
+        if datadict.get("companyAddress") == "":
+            compAdd = customer.company_address
+        else:
+            compAdd = datadict.get("companyAddress")
+
+        data = {
+        'company': comp,
+        'company_id': compId,
+        'firstname': fname,
+        'lastname': lname,
+        'phone': pnum,
+        'email': mail,
+        'company_address': compAdd,
+        }
+        form = UpdateCustomerForm(data, instance=customer)
+        print(form.errors)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Account information was saved for ' + user.username)
             return redirect('user-page')
+    else:
+        form = UpdateCustomerForm(instance=customer)
     context = {'form':form, 'customer':customer, 'customerList': allCustomers}
     return render(request, 'accounts/user.html', context)
 
@@ -959,6 +1021,12 @@ def providerUser(request):
             return redirect('user-page')
     context = {'form':form, 'customer':customer}
     return render(request, 'accounts/provider_user.html', context)
+
+@login_required(login_url='login')
+def userRating(request):
+    context = {}
+    return render(request, 'accounts/user_rating.html', context)
+
 
 """
 @login_required(login_url='login')

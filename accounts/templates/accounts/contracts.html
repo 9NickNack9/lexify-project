@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 	.timer{
 	/*background-color: #dc3545;*/
@@ -19,6 +20,10 @@
 	th,td {
 		display: table-cell;
 		text-align: center;
+	}
+
+	.checked {
+  		color: orange;
 	}
 </style>
 
@@ -73,6 +78,26 @@
 					<th>Date Created</th>
 					<th>Lexify Service Provider Name</th>
 					<th>Copy of the Lexify Contract</th>
+					<th>My Rating of the Lexify Service Provider</th>
+					<th>General Rating of the Lexify Service Provider</th>
+				</tr>
+
+				<tr>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>-</td>
+					<td>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star"></span>
+					<span class="fa fa-star"></span></td>
+					<td><span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star"></span>
+					<span class="fa fa-star"></span></td>
 				</tr>
 			</table>
 		</div>

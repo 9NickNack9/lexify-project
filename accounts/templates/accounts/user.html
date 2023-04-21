@@ -8,6 +8,22 @@
 		-webkit-text-stroke-width: 0.5px;
 		-webkit-text-stroke-color: black;
 	}
+
+	.passChange:link, .passChange:visited {
+  background-color: #eeefee;
+  color: black;
+  padding: 2px 7px;
+  border: 1px solid black;
+  border-radius: 2px;
+
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+	}
+
+	.passChange:hover, .passChange:active {
+	  background-color: lightgray;
+	}
 </style>
 
 <h1 class="title">My Lexify Account</h1>
@@ -15,26 +31,23 @@
 <div class="row">
 	<div class="col-md">
 		<div class="card card-body">
-			<form method="POST" action="">
+			<form method="POST">
+				{% csrf_token %}
 				<h3>My Contact Information</h3>
-				<p>Company name: <input type="text" value={{customer.company}} size="30" style="margin-left: 107px;"></p>
-				<p>Company's Finnish Business ID: <input type="text" value={{customer.company_id}} size="30" style="margin-left: 2px;"></p>
-				<p>Company Street Address: <input type="text" value={{customer.company_id}} size="30" style="margin-left: 44px;"></p>
-				<p>Contact Person First Name: <input type="text" value={{customer.firstname}} size="30" style="margin-left: 31px;"></p>
-				<p>Contact Person Last Name: <input type="text" value={{customer.lastname}} size="30" style="margin-left: 33px;"></p>
-				<p>Contact Person Phone Number: <input type="text" value={{customer.phone}} size="30"></p>
-				<p>Contact Person Email: <input type="text" value={{customer.email}} size="30" style="margin-left: 69px;"></p>
-				<!--
-				<p>Username: {{customer.name}}</p>
-				<p>First Name: {{customer.firstname}}</p>
-				<p>Last Name: {{customer.lastname}}</p>
-				<p>Phone Number: {{customer.phone}}</p>
-				<p>Company: {{customer.company}}</p>
-				<p>Company ID: {{customer.company_id}}</p>
-				<p>Email: {{customer.email}}</p>-->
+				<p><strong>Company Information</strong></p>
+				<p>Company name: <input type="text" name="companyName" placeholder="{{customer.company}}" size="30" disabled></p>
+				<p>Company's Finnish Business ID: <input type="text" name="companyId" placeholder="{{customer.company_id}}" size="30" disabled></p>
+				<p>Company Street Address: <input type="text" name="companyAddress" placeholder="{{customer.company_address}}" size="30"></p>
+				<p><strong>Company Contact Person Information</strong></p>
+				<p>First Name: <input type="text" name="firstName" placeholder="{{customer.firstname}}" size="30"></p>
+				<p>Last Name: <input type="text" name="lastName" placeholder="{{customer.lastname}}" size="30" style="margin-left: 2px;"></p>
+				<p>Telephone: <input type="tel" name="phoneNumber" placeholder="{{customer.phone}}" size="30"style="margin-left: 5px;"></p>
+				<p>Email: <input type="email" name="eMail" placeholder="{{customer.email}}" size="30"></p>
 				<p><strong>NOTE: </strong><i>The above contact information will automatically be used as your contact details for any Lexify Contract you may enter into with Lexify Service Providers.</i></p>
 				<p>Username: {{customer.name}}</p>
-				<p>Password: </p>
+				<a href="{% url 'password_change' %}" class="passChange">Change Password</a>
+				<br>
+				<br>
 				<input type="submit" name="save" id="save" value="Save Contact Information">
 			</form>
 		</div>

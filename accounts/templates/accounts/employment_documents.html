@@ -101,10 +101,12 @@
 					<label for="employment_warning">Written Warning</label><br>
 					<input type="checkbox" name="employment_docTemplate" value="Termination Notice" id="employment_termNotice">
 					<label for="employment_termNotice">Termination Notice</label><br>
-					<input type="checkbox" name="employment_docTemplate" value="YT-menettelydokkarit" id="employment_ytMenDok">
-					<label for="employment_ytMenDok">YT-menettelydokkarit</label><br>
+					<input type="checkbox" name="employment_docTemplate" value="YT-menettelydokkarit" id="employment_changeneg">
+					<label for="employment_changeneg">Templates Required for Change Negotiations</label><br>
+					<input type="checkbox" name="employment_docTemplate" value="Employment Policies" id="employment_policies">
+					<label for="employment_policies">Employment Policies (FI: työsuhteen ehdot)</label><br>
 					<input type="checkbox" name="employment_docTemplate" value="Muuta" id="employment_other">
-					<label for="employment_ytMenDok">Muuta?</label><br>
+					<label for="employment_ytMenDok">Other Template(s) (Please describe the required templates below)</label><br>
 					<label><strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
 					<br>
 					<hr>
@@ -139,6 +141,11 @@
 					<label>By when do you need offers from interested service providers?</label>
 					{{ form.b2bDate }}
 					<br>
+					<hr>
+					<label for="doc">Do you require the legal service provider to adhere to specific instructions (e.g. supplier code of conduct, invoicing instructions, or the like)? If yes, please upload the relevant instructions in PDF format by clicking "Choose File" below.</label><br>
+					<input type="file" name="doc" id="doc" accept=".pdf" multiple>
+					<br>
+					<label><strong>NOTE: </strong>: <i>Any instructions you may upload will always be superseded by  the Lexify GTCs in the order of precedence of contract documents between you and the legal service provider.</i></label>
 					<hr>
 					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
 					{{ form.title }}

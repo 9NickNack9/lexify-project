@@ -15,6 +15,7 @@ class Customer(models.Model):
 	email = models.CharField(max_length=200, null=True)
 	company = models.CharField(max_length=200, null=True)
 	company_id = models.CharField(max_length=200, null=True)
+	company_address = models.CharField(max_length=200, null=True)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 
 	def __str__(self):
@@ -58,8 +59,16 @@ class B2BRequest(models.Model):
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
 
+	RATINGS = (
+				('No, all LSPs can tender.', 'No, all LSPs can tender.'),
+				('Yes, at least 2 stars', 'Yes, at least 2 stars'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+				('Yes, at least 5 stars', 'Yes, at least 5 stars'),
+		)
+
 	requestDescription = "B2B Sales Contract"
-	b2b_help = ArrayField(models.CharField(max_length=50, blank=True), size=5, default=list)
+	b2b_help = ArrayField(models.CharField(max_length=100, blank=True), size=5, default=list)
 	language = ArrayField(models.CharField(max_length=50, blank=True), size=5, default=list)
 	note = models.TextField(blank=False, null=True)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
@@ -68,6 +77,7 @@ class B2BRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 
 	def __str__(self):
 		return self.title
@@ -143,6 +153,7 @@ class EmploymentTemplateRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -174,6 +185,9 @@ class EmploymentNegotiationRequest(models.Model):
 						('Employment Contract', 'Employment Contract'),
 						('Managing Director Contract','Managing Director Contract'),
 						('Mutual Termination Contract','Mutual Termination Contract'),
+						('Contract regarding Employment Benefits','Contract regarding Employment Benefits'),
+						('Settlement Agreement regarding a Dispute with the Employee','Settlement Agreement regarding a Dispute with the Employee'),
+						('Other Contract (Please describe the purpose of the contract below)', 'Other Contract (Please describe the purpose of the contract below)'),
 						)
 
 	requestDescription = "Employment Contract Negotiation"

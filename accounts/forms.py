@@ -11,6 +11,11 @@ class CreateUserForm(UserCreationForm):
 		model = User
 		fields = ['username','first_name', 'last_name', 'email', 'password1', 'password2']
 
+class UpdateCustomerForm(ModelForm):
+	class Meta:
+		model = Customer
+		fields = ['firstname','lastname', 'phone', 'email', 'company', 'company_id', 'company_address']
+
 
 class RequestForm(ModelForm):
 

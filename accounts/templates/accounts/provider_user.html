@@ -1,19 +1,41 @@
 {%  extends 'accounts/main.html' %}
 
 {% block content %}
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style type="text/css">
 	.title{
 		color:#10999f;
 		-webkit-text-stroke-width: 1px;
 		-webkit-text-stroke-color: black;
 	}
+
+	.userRatingButton{
+		-webkit-appearance: button;
+    	-moz-appearance: button;
+    	appearance: button;
+		align-content: left;
+		width: 250px;
+		background-color: #11999e;
+		border: none;
+		color: white;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		border-radius: 8px;
+	}
+
+	.userRatingButton:hover{
+		color: white;
+	}
 </style>
 
 <h1 class="title">My Lexify Account</h1>
 
 <div class="row">
-	<div class="col-md">
+	<div class="col-md-12">
 		<div class="card card-body">
 			<form method="POST" action="">
 				<h3>My Contact Information</h3>
@@ -37,6 +59,13 @@
 				<p>Password: </p>
 				<input type="submit" name="save" id="save" value="Save Contact Information">
 			</form>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="card card-body">
+			<h1>Your Lexify Service Provider rating based on customer feedback:</h1>
+			<h3>4.5/5</h3>
+			<a href="{% url 'user_rating' %}" class="userRatingButton">View Your Rating Breakdown</a>
 		</div>
 	</div>
 </div>

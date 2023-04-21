@@ -60,4 +60,6 @@ urlpatterns = [
     path('provider_requests/', views.providerRequests, name='provider_requests'),
 
     path('make_offer/<str:pk>/', views.makeOffer, name='make_offer'),
+    path('password-change/', views.ChangePasswordView.as_view(), name='password_change'),
+    path('user_rating/', views.userRating, name='user_rating'),
 ]

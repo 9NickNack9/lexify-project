@@ -53,12 +53,19 @@
 <label><i>The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.</i></label>
 <br>
 <hr>
-<h5>Submit your offer in response to the Lexify Request</h5>
+<h5>Insert contact details of partner/lawyer responsible for your offer:</h5>
+<label>Full Name: </label><br><input type="text" name="offerer_name"><br>
+<label>Email: </label><br><input type="email" name="offerer_email"><br>
+<label>Telephone: </label><br><input type="tel" name="offerer_phone">
+<br>
+<hr>
+<h5>Your offer in response to the Lexify Request</h5>
+<p><strong><i>Price to be offered: {{request.priceOffer}}</i></strong></p>
 <label>Insert your offered price (VAT 0%)</label>
 <br>
 <input type="number" name="offer_price"> <label> €</label>
 <br>
-<label><input type="checkbox" name="confirmBox" required="required" class="confirm"><strong> By submitting an offer I accept that, provided mine is the winning offer, I automatically enter into a Lexify Contract with the Lexify Legal Service User who has submitted the Lexify Request, <br>and am thereby contractually bound to provide the legal services described in the Lexify Request for the price I have offered.</strong></label>
+<label><input type="checkbox" name="confirmBox" required="required" class="confirm"><strong> By submitting an offer I accept that, provided mine is the winning offer, I automatically enter into a Lexify Contract with the Lexify Legal Service User who has submitted the Lexify Request, <br>and am thereafter contractually bound to provide the legal services described in the Lexify Request for the price I have offered.</strong></label>
 <br>
 <button class="offerButton offerButtonSubmit">Submit Offer</button>
 <button class="offerButton offerButtonExit" href="{% url 'provider_requests'%}">Exit without submitting an offer</button>
