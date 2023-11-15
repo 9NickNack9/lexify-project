@@ -40,9 +40,9 @@
         background-attachment: fixed;
         background-repeat: no-repeat;
 
-        font-family: "Vibur", cursive;
+        font-family: serif;
         /*   the main font */
-        font-family: "Abel", sans-serif;
+        font-family: serif;
         opacity: 0.95;
         /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
       }
@@ -75,19 +75,18 @@
 
       /* the header form form */
       header {
-        margin: 25% auto 0% auto;
+        margin: 2% auto 2% auto;
         text-align: center;
       }
       /* Login title form form */
       header h2 {
         font-size: 250%;
-        font-family: "Playfair Display", serif;
+        font-family: serif;
         color: #ffffff;
       }
 
-      header h5 {
-        width: 400px;
-        font-size: 150%;
+      header h3 {
+        font-size: 250%;
         font-family: serif;
         color: #ffffff;
       }
@@ -103,31 +102,50 @@
       .input-item {
         background: #e0e0e0;
         color: #333;
-        padding: 14.5px 0px 14.5px 9px;
+        padding: 16.5px 2px 16.5px 7px;
         border-radius: 5px 0px 0px 5px;
       }
 
+      /* Show/hide password Font Icon */
+      #eye {
+        background: #fff;
+        color: #333;
+
+        margin: 5.9px 0 0 0;
+        margin-left: -20px;
+        padding: 15px 9px 19px 0px;
+        border-radius: 0px 5px 5px 0px;
+
+        float: right;
+        position: relative;
+        right: 1%;
+        top: -0.1%;
+        z-index: 5;
+
+        cursor: pointer;
+      }
       /* inputs form  */
       input[class="form-input"] {
-        width: 240px;
+        width: 280px;
         height: 50px;
 
         margin-top: 2%;
         padding: 15px;
 
         font-size: 16px;
-        font-family: "Abel", sans-serif;
+        font-family: serif;
         color: #5e6472;
 
         outline: none;
         border: none;
 
-        border-radius: 0px 5px 5px 0px;
+        border-radius: 5px 5px 5px 5px;
         transition: 0.2s linear;
       }
       input[id="txt-input"] {
         width: 250px;
       }
+
       /* focus  */
       input:focus {
         transform: translateX(-2px);
@@ -144,8 +162,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 150px;
-        margin-bottom: -180px;
+        margin-top: 50px;
+        margin-bottom: -170px;
         z-index: 1;
         position: relative;
       }
@@ -178,21 +196,20 @@
       }
       /* Submits */
       .submits {
-        width: 48%;
-        display: inline-block;
-        float: right;
-        margin-left: 2%;
+        width: 100%;
+        display: inline;
+        margin-left: 30%;
+      }
+
+      /*       Forgot Password button FAF3DD  */
+      .frgt-pass {
+        background: transparent;
       }
 
       /*     Sign Up button  */
       .sign-up {
-        font-family: serif;
-        font-size: 24px;
         color: #333;
         background: #b8f2e6;
-        width: 400px;
-        height: 50px;
-        margin: 10px;
       }
 
       /* buttons hover */
@@ -213,6 +230,11 @@
           transform: translateY(5px);
         }
       }
+
+      .register {
+        /*background: #b8f2e6;*/
+        background: #7c7c7c;
+      }
     </style>
   </head>
   <body>
@@ -225,29 +247,77 @@
         <!--   con = Container  for items in the form-->
         <div class="con">
           <!--     Start  header Content  -->
-          <header class="head-form">
-            <h5>
-              Do you wish to register as a legal service provider or as a
-              purchaser of legal services?
-            </h5>
-          </header>
+          <header class="head-form"></header>
           <!--     End  header Content  -->
           <br />
           <div class="field-set">
-            <a href="{% url 'provider_register' %}" class="btn sign-up">
-              Legal Service Provider
-            </a>
-            <a href="{% url 'client_register' %}" class="btn sign-up">
-              Purchaser of Legal Services
-            </a>
+            <!--   user name -->
+            {{form.username}}
+            <br />
+            <!--   first name -->
+            {{form.first_name}}
+
+            <br />
+            <!--   last name -->
+            {{form.last_name}}
+
+            <br />
+            <!-- email -->
+            {{form.email}}
+
+            <br />
+            <!-- company -->
+            <input
+              class="form-input"
+              id="company"
+              type="text"
+              placeholder="Company"
+              name="company"
+              required
+            />
+
+            <br />
+            <!-- company id -->
+            <input
+              class="form-input"
+              id="company_id"
+              type="text"
+              placeholder="Company ID"
+              name="company_id"
+              required
+            />
+
+            <br />
+            <!-- phone-->
+            <input
+              class="form-input"
+              id="phone"
+              type="text"
+              placeholder="Phone Number"
+              name="phone"
+              required
+            />
+            <br />
+            <!--   Password1 -->
+            {{form.password1}}
+
+            <!--   Password2 -->
+            {{form.password2}}
+
+            <br />
+            <!--      button LogIn -->
+            <input
+              class="register"
+              type="submit"
+              value="REGISTER ACCOUNT"
+              disabled="disabled"
+            />
           </div>
           <!--   other buttons -->
           <div class="other">
-            <!--     Sign Up button -->
-            <a href="{% url 'login' %}" class="btn submits sign-up">
-              Go Back to Login
-            </a>
-            <!--      End Other the Division -->
+            <!--      Forgot Password button-->
+            <p style="font-size: 18px">Already have an account?</p>
+            <a href="{% url 'login' %}" class="btn submits sign-up"> LOG IN </a>
           </div>
 
           <!--   End Conrainer  -->
@@ -256,5 +326,22 @@
         <!-- End Form -->
       </form>
     </div>
+    <script>
+      /* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+		//We start indexing at one because CSRF_token is considered an input field 
+		 */
+
+      //Query All input fields
+      var form_fields = document.getElementsByTagName("input");
+      form_fields[1].placeholder = "Username";
+      form_fields[2].placeholder = "First Name";
+      form_fields[3].placeholder = "Last Name";
+      form_fields[4].placeholder = "Email";
+      form_fields[5].placeholder = "Company Name";
+      form_fields[6].placeholder = "Company ID";
+      form_fields[7].placeholder = "Phone Number";
+      form_fields[8].placeholder = "Enter Password";
+      form_fields[9].placeholder = "Re-enter Password";
+    </script>
   </body>
 </html>

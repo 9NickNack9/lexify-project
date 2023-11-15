@@ -42,18 +42,6 @@
 					<th>Update Lexify Request</th>
 					<th>Remove Lexify Request</th>
 				</tr>
-
-				{% for req in requests %}
-					<tr>
-						<td>{{req.title}}</td>
-						<td>{{req.date_created}}</td>
-						<td class="timer"><b>{{req.b2bDate|timeuntil}}</b></td>
-						<td>0</td><!--{{contracts.count}}-->
-						<td><a class="btn btn-sm btn-info" href="{% url 'update_request' req.id %}">Update</a></td>
-						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_request' req.id %}">Delete</a></td>
-					</tr>
-				{% endfor %}
-
 				{% for e in emp %}
 					<tr>
 						<td>{{e.title}}</td>

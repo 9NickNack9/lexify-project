@@ -1,0 +1,49 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+	.disabled-link {
+		pointer-events: none;
+		background-color: lightgray;
+</style>
+
+
+<div>
+	<h3>Some features may be locked until your account has been authorized by the admins.</h5>
+	<h5>This may take a couple business days.</h3>
+</div>
+<br>
+<div class="list-group">
+  <a href="{% url 'unauthorized_requests' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">See Who Wants to Buy Legal Services</h5>
+    </div>
+    <p class="mb-1">Browse available legal service requests</p>
+  </a>
+  <a href="{% url 'unauthorized_offers' %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">My Offers & Lexify Contracts</h5>
+    </div>
+    <p class="mb-1">View offers you have made and your Lexify Contracts</p>
+  </a>
+  <a href="{% url 'provider_user' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">My Lexify Account</h5>
+    </div>
+    <p class="mb-1">Manage your account details</p>
+  </a>
+  <a href="{% url 'feedback' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Give Feedback to Lexify</h5>
+    </div>
+    <p class="mb-1">Please let us know what you like about Lexify and what we could do better</p>
+  </a>
+  <a href="{% url 'logout' %}" class="list-group-item list-group-item-action" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Log out</h5>
+    </div>
+  </a>
+</div>
+{% endblock %}

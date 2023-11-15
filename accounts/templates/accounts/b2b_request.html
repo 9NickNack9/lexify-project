@@ -1,174 +1,430 @@
-{% extends 'accounts/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'accounts/main.html' %} {% load static %} {% block content %}
 <!DOCTYPE html>
 <html>
-<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <head>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+    ></script>
 
-	<script type= "text/javascript">
-		$(document).ready( function() 
-		{
-			$('#preview').on('click', function(e) {
-				e.preventDefault();
-				preview();
-			});
-		});
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" />
 
-		function preview()
-		{
-			var b2bCheckboxes = $('input[type="radio"]:checked').map(function() {return $(this).val();}).get().join(', ');
-			document.body.append(b2bCheckboxes);
-			var b2bLabel = "Legal support needed: ";
-			var b2bData = '<p>' + b2bLabel + b2bCheckboxes + '</p>';
+    <script type="text/javascript">
+      /*
+      $(document).ready(function () {
+        $("#preview").on("click", function (e) {
+          e.preventDefault();
+          preview();
+        });
+      });
 
-			var b2bBus = $('#id_note').val();
-			var b2bBusLabel = "Description of my line of business: ";
-			var b2bBusData = '<p>' + b2bBusLabel + ' ' + b2bBus + '</p>';
+      function preview() {
+        var b2bCheckboxes = $('input[type="radio"]:checked')
+          .map(function () {
+            return $(this).val();
+          })
+          .get()
+          .join(", ");
+        document.body.append(b2bCheckboxes);
+        var b2bLabel = "Legal support needed: ";
+        var b2bData = "<p>" + b2bLabel + b2bCheckboxes + "</p>";
 
-			var titleData = '<p><strong> I need help with B2B sales contracts</strong></p>';
+        var b2bBus = $("#id_note").val();
+        var b2bBusLabel = "Description of my line of business: ";
+        var b2bBusData = "<p>" + b2bBusLabel + " " + b2bBus + "</p>";
 
-			var otherInfoTitle = "Other information: ";
-			var otherInfo = $('#id_otherInfo').val();
-			var otherInfoData = '<p>' + otherInfoTitle + ' ' + otherInfo + '</p>';
+        var titleData =
+          "<p><strong> I need help with B2B sales contracts</strong></p>";
 
-			var trainDate = $('#id_b2bDate').val();
-			var trainDateLabel = "Your offer must be submitted by: ";
-			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
+        var otherInfoTitle = "Other information: ";
+        var otherInfo = $("#id_otherInfo").val();
+        var otherInfoData = "<p>" + otherInfoTitle + " " + otherInfo + "</p>";
 
-			var invoiceTitle = "How I wish to be invoiced: ";
-			var invoiceWay = $('#id_invoiceType').val();
-			var invoiceData = '<p>' + invoiceTitle + ' ' + invoiceWay +'</p>';
+        var trainDate = $("#id_b2bDate").val();
+        var trainDateLabel = "Your offer must be submitted by: ";
+        var trainDateData = "<p>" + trainDateLabel + " " + trainDate + "</p>";
 
-			var languageBoxes = $('input[type="checkbox"]:checked').map(function() {return $(this).val();}).get().join(', '); document.body.append(b2bCheckboxes);
-			var languageTitle = "Languages needed for the performance of the work: ";
-			var languageData = '<p>' + languageTitle + ' ' + languageBoxes +'</p>';
+        var invoiceTitle = "How I wish to be invoiced: ";
+        var invoiceWay = $("#id_invoiceType").val();
+        var invoiceData = "<p>" + invoiceTitle + " " + invoiceWay + "</p>";
 
-			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request."
+        var languageBoxes = $('input[type="checkbox"]:checked')
+          .map(function () {
+            return $(this).val();
+          })
+          .get()
+          .join(", ");
+        document.body.append(b2bCheckboxes);
+        var languageTitle =
+          "Languages needed for the performance of the work: ";
+        var languageData = "<p>" + languageTitle + " " + languageBoxes + "</p>";
 
-			var data = titleData + b2bData + b2bBusData + otherInfoData + trainDateData + invoiceData + languageData + legalText;
+        var legalText =
+          "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
 
-			$('#preview_data').html('');
-	        $('#preview_data').append(data);
-	        $('#preview_data').dialog({
-	            resizable: false,
-	            modal: true,
-	            buttons: 
-	            {
-	                'Submit': function() 
-	                {
-	                    //submit the form
-	                    $(this).dialog("close");
-	                },
-	                Cancel: function() 
-	                {
-	                    $(this).dialog("close");
-					}
-				}
-			});
-		}
-	</script>
+        var data =
+          titleData +
+          b2bData +
+          b2bBusData +
+          otherInfoData +
+          trainDateData +
+          invoiceData +
+          languageData +
+          legalText;
 
-	<style type="text/css">
-		input[type="radio"]{
-			vertical-align: baseline;
-		}
-	</style>
-	
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Static Example</title>
+        $("#preview_data").html("");
+        $("#preview_data").append(data);
+        $("#preview_data").dialog({
+          resizable: false,
+          modal: true,
+          buttons: {
+            Submit: function () {
+              //submit the form
+              $(this).dialog("submit");
+            },
+            Cancel: function () {
+              $(this).dialog("close");
+            },
+          },
+        });
+      }*/
+    </script>
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <style type="text/css">
+      input[type="radio"] {
+        vertical-align: baseline;
+      }
 
-	<!-- XDSoft DateTimePicker -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
-</head>
+      body {
+        background: #11999e;
+      }
+    </style>
 
-<body>
-	<h1>Create a Lexify Request</h1>
-    <h3>Help with B2B Sales Contracts</h3>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card card-body">
-				<form action="" method="POST">
-					{% csrf_token %}
-					<h5>What kind of help do you need?:</h5>
-					<label> <input type="radio" name="b2b_help" value="I need a sales contract template for my B2B business" id="b2bcontract_template"> I need a sales contract template for my B2B business <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label><br>
-					<br>
-					<label><input type="radio" name="b2b_help" value="I need legal comments on a contract template sent by the customer" id="b2bcontract_comments"> I need legal comments on a contract template sent by the customer <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label><br>
-					<br>
-					<label><input type="radio" name="b2b_help" value="I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds" id="b2bcontract_lawyer"> I need a legal review of a customer’s comments on my own contract template and possible further assistance during later negotiation rounds <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided</i> </label>
-					<br>
-					<hr>
-					<label for="{{ form.note.id_for_label }}">Describe your relevant line of business briefly with a few sentences:</label>
-					<br>
-					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
-					<br>
-					{{ form.note }}
-					<br>
-					<hr>
-					<label>Any other background information you would want to provide to Lexify legal service providers?:</label>
-					<br>
-					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
-					<br>
-					{{ form.otherInfo }}
-					<br>
-					<hr>
-					<label>Who can make you an offer?</label>
-					{{ form.offerMaker }}
-					<br>
-					<hr>
-					<label>Do tendering Lexify Service Providers need to have a minimum Lexify customer feedback rating?</label>
-					{{ form.ratingType }}
-					<br>
-					<hr>
-					<label>How do you want to be invoiced?</label>
-					{{ form.invoiceType }}
-					<br>
-					<hr>
-					<label>What languages are needed for the performance of the work?: </label>
-					<input type="checkbox" name="language" value="English" id="langEng">
-					<label for="langEng">English</label>
-					<input type="checkbox" name="language" value="Finnish" id="langFin">
-					<label for="langFin">Finnish</label>
-					<input type="checkbox" name="language" value="Swedish" id="langSwe">
-					<label for="langSwe">Swedish</label>
-					<input type="checkbox" name="language" value="German" id="langGer">
-					<label for="langGer">German</label>
-					<input type="checkbox" name="language" value="French" id="langFr">
-					<label for="langFr">French</label>
-					<br>
-					<hr>
-					<label>By when do you need offers from interested service providers?</label>
-					{{ form.b2bDate }}
-					<br>
-					<hr>
-					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
-					{{ form.title }}
-					<br>
-					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
-					<br>
-					<hr>
-					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
-					<input type="submit" name="submit" id="submit "value="Submit your Lexify Request"/>
-					<input type="reset" name="reset" value="Clear All"/>
-				</form>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="card card-body">
-				<h5>Preview of your Lexify Request</h5>
-				<div id="preview_data" name="preview_data" title="Preview request form"></div>
-			</div>
-		</div>
-	</div>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Static Example</title>
+  </head>
 
-</body>
+  <body>
+    <h1 style="color: white">Create a Lexify Request</h1>
+    <h3 style="color: white">Help with B2B Sales Contracts</h3>
+    <div class="row" style="display: flex">
+      <div class="col-md-6">
+        <div
+          class="card card-body"
+          style="justify-content: center; align-items: center"
+        >
+          <form action="" method="POST">
+            {% csrf_token %}
+            <h5>What do you need?</h5>
+            <label>
+              <input
+                type="radio"
+                name="b2b_help"
+                value="I need a sales contract template for my B2B business"
+                id="b2bcontract_template"
+                onclick="updateLegal1()"
+              />
+              I need a sales contract template for my B2B business <br />
+              <strong>NOTE: </strong
+              ><i
+                >Any offers you receive will be for a lump sum fixed price.</i
+              ></label
+            ><br />
+            <br />
+            <label
+              ><input
+                type="radio"
+                name="b2b_help"
+                value="I need legal comments on a contract template sent by the customer"
+                id="b2bcontract_comments"
+                onclick="updateLegal2()"
+              />
+              I need a legal review of a contract template sent by a customer
+              and possible further assistance during later negotiation rounds
+              <br />
+              <strong>NOTE</strong>:
+              <i
+                >Any offer you receive will provide an applicable hourly rate
+                only. The total price of the service will be calculated by
+                multiplying such hourly rate with the number of hours of legal
+                support provided. Any offered hourly rate will be valid for
+                three months from the date of the Lexify Contract.</i
+              > </label
+            ><br />
+            <br />
+            <label
+              ><input
+                type="radio"
+                name="b2b_help"
+                value="I need a legal review of a customer's comments on my own contract template and possible further assistance during later negotiation rounds"
+                id="b2bcontract_lawyer"
+                onclick="updateLegal3()"
+              />
+              I need a legal review of a customer's comments on my own contract
+              template and possible further assistance during later negotiation
+              rounds <br />
+              <strong>NOTE</strong>:
+              <i
+                >Any offer you receive will provide an applicable hourly rate
+                only. The total price of the service will be calculated by
+                multiplying such hourly rate with the number of hours of legal
+                support provided. Any offered hourly rate will be valid for
+                three months from the date of the Lexify Contract.</i
+              >
+            </label>
+            <br />
+            <hr />
+            <label for="{{ form.note.id_for_label }}"
+              >Please provide a brief description of your company's line of
+              business.</label
+            >
+            <br />
+            <label
+              ><strong>NOTE</strong>:
+              <i
+                >Please do not include any personal data in the description</i
+              ></label
+            >
+            <br />
+            <div id="notebox">{{ form.note }}</div>
+            <br />
+            <hr />
+            <label
+              >Please provide additional background information, if any, you
+              wish to share with legal service providers in your Lexify
+              Request.</label
+            >
+            <br />
+            <label
+              ><strong>NOTE</strong>:
+              <i
+                >Please do not include any personal data in the description</i
+              ></label
+            >
+            <br />
+            <div id="addinfo">{{ form.otherInfo }}</div>
+            <br />
+            <hr />
+            <label>Who can make you an offer?</label>
+            {{ form.offerMaker }}
+            <br />
+            <label
+              >Do you wish your legal service provider employs at least a
+              certain number of lawyers?</label
+            >
+            {{ form.offerSize }}
+            <label
+              >Do you wish your legal service provider has been in operation for
+              a minimum period of time?</label
+            >
+            {{ form.offerOperation }}
+            <br />
+            <hr />
+            <label
+              >Do tendering legal service providers need to have a minimum
+              Lexify customer feedback rating? This rating is based on feedback
+              a legal service provider has received previously from other Lexify
+              users.</label
+            >
+            {{ form.ratingType }}
+            <br />
+            <hr />
+            <label>How do you want to be invoiced?</label>
+            {{ form.invoiceType }}
+            <br />
+            <hr />
+            <label
+              >What languages are needed for the performance of the work?:
+            </label>
+            <input
+              type="checkbox"
+              name="language"
+              value="English"
+              id="langEng"
+            />
+            <label for="langEng">English</label>
+            <input
+              type="checkbox"
+              name="language"
+              value="Finnish"
+              id="langFin"
+            />
+            <label for="langFin">Finnish</label>
+            <input
+              type="checkbox"
+              name="language"
+              value="Swedish"
+              id="langSwe"
+            />
+            <label for="langSwe">Swedish</label>
+            <input
+              type="checkbox"
+              name="language"
+              value="German"
+              id="langGer"
+            />
+            <label for="langGer">German</label>
+            <input type="checkbox" name="language" value="French" id="langFr" />
+            <label for="langFr">French</label>
+            <br />
+            <hr />
+            <label
+              >By when do you need offers from interested legal service
+              providers?</label
+            >
+            {{ form.b2bDate }}
+            <br />
+            <hr />
+            <label for="{{ form.title.id_for_label }}"
+              >Give a title for your Lexify Request:</label
+            >
+            {{ form.title }}
+            <br />
+            <label
+              ><strong>NOTE</strong>:
+              <i
+                >This title will not be shown to any legal service providers and
+                will only be used in your personal Lexify Request archive (see
+                My Archive in the Lexify main menu).</i
+              ></label
+            >
+            <br />
+            <hr />
+            <input
+              type="button"
+              name="preview"
+              id="preview"
+              value="Preview Your Lexify Request"
+              onclick="scrollToTop();updatePreview();"
+            />
+            <input type="reset" name="reset" value="Clear All" />
+            <br />
+            <br />
+            <input
+              type="checkbox"
+              name="submitCheck"
+              id="submitCheck"
+              required
+            />
+            <label for="submitCheck">
+              I have carefully reviewed my Lexify Request and I'm ready to
+              submit it.
+            </label>
+            <br />
+            <span
+              ><i
+                >By submitting my Lexify Request I accept that Lexify will
+                automatically generate a binding Lexify Contract between my
+                company as the legal service purchaser and the legal service
+                provider submitting the best offer subject to the parameters in
+                my Lexify Request. Such Lexify Contract will not be generated if
+                i) no qualifying offers have been received prior to the
+                expiration of the relevant Lexify Offer or ii) I as
+                representative of the legal service purchaser cancel the
+                relevant Lexify Request before any qualifying offers have been
+                received.</i
+              ></span
+            >
+            <br />
+            <br />
+            <input
+              type="submit"
+              name="submit"
+              id="submit"
+              value="Submit Your Lexify Request"
+            />
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-body">
+          <h5>Preview of Your Lexify Request</h5>
+          <br />
+          <div id="preview_form" style="visibility: hidden">
+            <label><strong>Legal Support needed: </strong></label>
+            <label id="legal_support"></label>
+            <br />
+            <label><strong>Description of my line of business: </strong></label>
+            <label id="business"></label>
+            <br />
+            <label><strong>Other information: </strong></label>
+            <label id="info"></label>
+            <br />
+            <label><strong>Your offer must be submitted by: </strong></label>
+            <label id="deadline"></label>
+            <br />
+            <label><strong>How I wish to be invoiced: </strong></label>
+            <label id="invoice"></label>
+            <br />
+            <label
+              ><strong
+                >Languages needed for the performance of the work:
+              </strong></label
+            >
+            <label id="language"></label>
+            <br />
+            <label><strong>Price to be offered: </strong></label>
+            <label id="price"></label>
+            <br />
+            <label
+              ><i
+                >The Lexify Contract GTCs are applied to all services provided
+                in relation to this Lexify Request.</i
+              ></label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function scrollToTop() {
+        window.scrollTo(0, 0);
+      }
+
+      function updatePreview() {
+        document.getElementById("preview_form").style.visibility = "visible";
+        if (document.getElementById("b2bcontract_template").checked) {
+          document.getElementById("legal_support").innerHTML = String(
+            document.getElementById("b2bcontract_template").value
+          );
+          var priceOffered = "Lump sum fixed price for the entire work.";
+        } else if (document.getElementById("b2bcontract_comments").checked) {
+          document.getElementById("legal_support").innerHTML = String(
+            document.getElementById("b2bcontract_template").value
+          );
+          var priceOffered =
+            "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+        } else {
+          document.getElementById("legal_support").innerHTML = String(
+            document.getElementById("b2bcontract_lawyer").value
+          );
+          var priceOffered =
+            "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+        }
+        document.getElementById("business").innerHTML = $("#id_note").val();
+        document.getElementById("info").innerHTML = $("#id_otherInfo").val();
+        document.getElementById("deadline").innerHTML = $("#id_b2bDate").val();
+        document.getElementById("invoice").innerHTML =
+          $("#id_invoiceType").val();
+        var languageBoxes = $('input[type="checkbox"]:checked')
+          .map(function () {
+            return $(this).val();
+          })
+          .get()
+          .join(", ");
+        document.getElementById("language").innerHTML = languageBoxes;
+        document.getElementById("price").innerHTML = priceOffered;
+      }
+    </script>
+  </body>
 </html>
 
 {% endblock %}

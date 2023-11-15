@@ -26,9 +26,19 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     success_message = "Successfully Changed Your Password"
     success_url = 'accounts/user.html'
 
+@login_required(login_url='login')
+def unauthorizedPage(request):
+    context = {}
+    return render(request, 'accounts/unauthorized.html', context)
+
 
 @unauthenticated_user
 def registerPage(request):
+    context = {}
+    return render(request, 'accounts/register.html', context)
+
+@unauthenticated_user
+def clientRegisterPage(request):
 
     form = CreateUserForm()
     if request.method == 'POST':
@@ -37,8 +47,9 @@ def registerPage(request):
             user = form.save()
             username = form.cleaned_data.get('username')
 
+            group = Group.objects.get(name='unauthorized')
             #group = Group.objects.get(name='customer')
-            #user.groups.add(group)
+            user.groups.add(group)
             Customer.objects.create(
                 user=user,
                 name=user.username,
@@ -55,7 +66,38 @@ def registerPage(request):
         
 
     context = {'form':form}
-    return render(request, 'accounts/register.html', context)
+    return render(request, 'accounts/client_register.html', context)
+
+@unauthenticated_user
+def providerRegisterPage(request):
+
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='unauthorized')
+            #group = Group.objects.get(name='provider')
+            user.groups.add(group)
+            Provider.objects.create(
+                user=user,
+                name=user.username,
+                firstname=form.cleaned_data.get('first_name'),
+                lastname=form.cleaned_data.get('last_name'),
+                email=form.cleaned_data.get('email'),
+                company=request.POST['company'],
+                company_id=request.POST['company_id'],
+                phone=request.POST['phone'],
+                )
+            messages.success(request, 'Account was created for ' + username)
+
+            return redirect('login')
+        
+
+    context = {'form':form}
+    return render(request, 'accounts/provider_register.html', context)
 
 
 @unauthenticated_user
@@ -82,6 +124,7 @@ def logoutUser(request):
     return redirect('login')
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def contracts(request):
     requests = Request.objects.all()
     employmentRequests = EmploymentTemplateRequest.objects.all()
@@ -90,17 +133,20 @@ def contracts(request):
     return render(request, 'accounts/contracts.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['provider', 'admin'])
 def makeOffer(request, pk):
     req = EmploymentTemplateRequest.objects.get(id=pk)
     context = {'request': req}
     return render(request, 'accounts/make_offer.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def offers(request):
     context = {}
     return render(request, 'accounts/offers.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['provider', 'admin'])
 def providerOffers(request):
     """
     offers = Offer.objects.all()
@@ -117,6 +163,7 @@ def providerOffers(request):
     return render(request, 'accounts/provider_offers.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['provider', 'admin'])
 def providerRequests(request):
     """
     offers = Offer.objects.all()
@@ -160,6 +207,7 @@ def providerRequests(request):
     return render(request, 'accounts/provider_requests.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin', 'provider'])
 def feedback(request):
 
     user = request.user
@@ -178,18 +226,21 @@ def createOffer(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def requestSelection(request):
     context = {}
     return render(request, 'accounts/request_selection.html', context)
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def contractRequest(request):
     context = {}
     return render(request, 'accounts/contract_request.html', context)
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def b2bRequest(request):
     form = B2BRequestForm()
     if request.method == 'POST':
@@ -199,6 +250,11 @@ def b2bRequest(request):
         templist = str(', '.join(template))
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('b2b_help') == "I need a sales contract template for my B2B business":
+            price = "Lump sum fixed price for the entire work."
+        else:
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        
         data = {
         'b2b_help': templist,
         'otherInfo' : datadict.get('otherInfo'),
@@ -208,6 +264,7 @@ def b2bRequest(request):
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
         'note': datadict.get('note'),
+        'priceOffer' : price,
         }
         form = B2BRequestForm(data)
         if form.is_valid():
@@ -219,15 +276,21 @@ def b2bRequest(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def b2cRequest(request):
     form = B2CRequestForm()
     if request.method == 'POST':
         q = request.POST
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
-        template = datadict.get('b2b_help')
+        template = datadict.get('b2c_help')
         templist = str(', '.join(template))
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('b2c_help') == "I need a sales contract template for my B2B business":
+            price = "Lump sum fixed price for the entire work."
+        else:
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        
         data = {
         'b2b_help': templist,
         'otherInfo' : datadict.get('otherInfo'),
@@ -237,6 +300,7 @@ def b2cRequest(request):
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
         'note': datadict.get('note'),
+        'priceOffer' : price,
         }
         form = B2CRequestForm(data)
         if form.is_valid():
@@ -248,6 +312,7 @@ def b2cRequest(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def employmentRequest(request):
     form = RequestForm()
     if request.method == 'POST':
@@ -260,10 +325,12 @@ def employmentRequest(request):
     return render(request, 'accounts/employment_request.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def employmentSelection(request):
     return render(request, 'accounts/employment_selection.html')
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def employmentTemplate(request):
     form = EmploymentTemplateRequestForm()
     if request.method == 'POST':
@@ -293,6 +360,7 @@ def employmentTemplate(request):
     return render(request, 'accounts/employment_template.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def employmentNegotiation(request):
     form = EmploymentNegotiationRequestForm()
     if request.method == 'POST':
@@ -309,6 +377,7 @@ def employmentNegotiation(request):
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
         'employmentPos': datadict.get('employmentPos'),
+        'priceOffer' : "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided.",
         }
         form = EmploymentNegotiationRequestForm(data)
         if form.is_valid():
@@ -319,6 +388,7 @@ def employmentNegotiation(request):
     return render(request, 'accounts/employment_negotiation.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def employmentDocuments(request):
     form = EmploymentDocumentRequestForm()
     if request.method == 'POST':
@@ -336,6 +406,7 @@ def employmentDocuments(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Lump sum fixed price for the entire work.",
         }
         form = EmploymentDocumentRequestForm(data)
         if form.is_valid():
@@ -347,6 +418,7 @@ def employmentDocuments(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestateRequest(request):
     form = RequestForm()
     if request.method == 'POST':
@@ -359,6 +431,7 @@ def realestateRequest(request):
     return render(request, 'accounts/realestate_request.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestateSelection(request):
     form = RequestForm()
     if request.method == 'POST':
@@ -371,6 +444,7 @@ def realestateSelection(request):
     return render(request, 'accounts/realestate_selection.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestatePurchase(request):
     form = RealEstatePurchaseRequestForm()
     if request.method == 'POST':
@@ -378,6 +452,12 @@ def realestatePurchase(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('realSalePurchase') == "Holistic legal representation throughout the transaction process (including but not limited to drafting of the sale and purchase agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)" or datadict.get('realSalePurchase') == "First draft of the sale and purchase agreement, ready for delivery to the other party":
+            price = "Lump sum fixed price for the entire work."
+        elif datadict.get('realSalePurchase') == "Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)":
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        else:
+            price = "Lump sum price for the first draft of the agreement and hourly rate for subsequent occasional support calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'realestateAgreement' : datadict.get('realestateAgreement'),
         'agreementBuyer' : datadict.get('agreementBuyer'),
@@ -391,6 +471,7 @@ def realestatePurchase(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = RealEstatePurchaseRequestForm(data)
         if form.is_valid():
@@ -401,6 +482,7 @@ def realestatePurchase(request):
     return render(request, 'accounts/realestate_purchase.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestateLeaseback(request):
     form = RealEstateLeasebackRequestForm()
     if request.method == 'POST':
@@ -408,6 +490,12 @@ def realestateLeaseback(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('realLeaseBack') == "Holistic legal representation throughout the transaction process (including but not limited to drafting of the sale and leaseback agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)" or datadict.get('realSalePurchase') == "First draft of the sale and leaseback agreement, ready for delivery to the other party":
+            price = "Lump sum fixed price for the entire work."
+        elif datadict.get('realSalePurchase') == "Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)":
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        else:
+            price = "Lump sum price for the first draft of the agreement and hourly rate for subsequent occasional support calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'leasebackSeller' : datadict.get('leasebackSeller'),
         'leasebackDescription' : datadict.get('leasebackDescription'),
@@ -420,6 +508,7 @@ def realestateLeaseback(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = RealEstateLeasebackRequestForm(data)
         if form.is_valid():
@@ -430,6 +519,7 @@ def realestateLeaseback(request):
     return render(request, 'accounts/realestate_leaseback.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestateLease(request):
     form = RealEstateLeaseRequestForm()
     if request.method == 'POST':
@@ -437,6 +527,12 @@ def realestateLease(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('realLeaseBack') == "Holistic legal representation throughout the transaction process (including but not limited to drafting of the lease and related documents, required negotiations with the other party and completion of signing/closing related legal actions)" or datadict.get('realSalePurchase') == "First draft of the lease agreement, ready for delivery to the other party":
+            price = "Lump sum fixed price for the entire work."
+        elif datadict.get('realLease') == "Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)":
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        else:
+            price = "Lump sum price for the first draft of the agreement and hourly rate for subsequent occasional support calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'realLease' : datadict.get('realLease'),
         'leaseAgreement' : datadict.get('leaseAgreement'),
@@ -449,6 +545,7 @@ def realestateLease(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = RealEstateLeaseRequestForm(data)
         if form.is_valid():
@@ -459,6 +556,7 @@ def realestateLease(request):
     return render(request, 'accounts/realestate_lease.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestateEasement(request):
     form = RealEstateEasementRequestForm()
     if request.method == 'POST':
@@ -466,6 +564,12 @@ def realestateEasement(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('realLeaseBack') == "Holistic legal representation throughout the easement agreement negotiation process (including but not limited to drafting of the easement agreement and related documents (excluding purely technical maps and other similar documents), required communications with the other property owner, participation in necessary easement related meetings with competent authorities, etc.)" or datadict.get('realSalePurchase') == "First draft of the easement agreement (excluding purely technical maps and similar documents), ready for delivery to the other property owner":
+            price = "Lump sum fixed price for the entire work."
+        elif datadict.get('realLease') == "Occasional support with the easement agreement negotiation process (e.g. commenting of the easement agreement documentation, legal advice during different stages of the process)":
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        else:
+            price = "Lump sum price for the first draft of the agreement and hourly rate for subsequent occasional support calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'constructionDescription' : datadict.get('constructionDescription'),
         'easementProperty' : datadict.get('easementProperty'),
@@ -476,6 +580,7 @@ def realestateEasement(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = RealEstateEasementRequestForm(data)
         if form.is_valid():
@@ -486,6 +591,7 @@ def realestateEasement(request):
     return render(request, 'accounts/realestate_easement.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def realestateConstruction(request):
     form = RealEstateConstructionRequestForm()
     if request.method == 'POST':
@@ -493,6 +599,12 @@ def realestateConstruction(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('realLeaseBack') == "Holistic legal representation throughout the transaction process (including but not limited to drafting of the construction agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)" or datadict.get('realSalePurchase') == "First draft of the construction agreement, ready for delivery to the other party":
+            price = "Lump sum fixed price for the entire work."
+        elif datadict.get('realLease') == "Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)":
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        else:
+            price = "Lump sum price for the first draft of the agreement and hourly rate for subsequent occasional support calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'realConstruction' : datadict.get('realConstruction'),
         'constructionAgreement' : datadict.get('constructionAgreement'),
@@ -504,6 +616,7 @@ def realestateConstruction(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = RealEstateConstructionRequestForm(data)
         if form.is_valid():
@@ -515,6 +628,7 @@ def realestateConstruction(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def sourcingRequest(request):
     form = RequestForm()
     if request.method == 'POST':
@@ -527,6 +641,7 @@ def sourcingRequest(request):
     return render(request, 'accounts/sourcing_request.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def sourcingSelection(request):
     form = RequestForm()
     if request.method == 'POST':
@@ -539,6 +654,7 @@ def sourcingSelection(request):
     return render(request, 'accounts/sourcing_selection.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def sourcingBusTemplate(request):
     form = sourcingBusTemplateRequestForm()
     if request.method == 'POST':
@@ -556,6 +672,7 @@ def sourcingBusTemplate(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Lump sum fixed price for the entire work.",
         }
         form = sourcingBusTemplateRequestForm(data)
         if form.is_valid():
@@ -566,6 +683,7 @@ def sourcingBusTemplate(request):
     return render(request, 'accounts/sourcing_bustemplate.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def sourcingSupTemplate(request):
     form = sourcingSupTemplateRequestForm()
     if request.method == 'POST':
@@ -581,6 +699,7 @@ def sourcingSupTemplate(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided.",
         }
         form = sourcingSupTemplateRequestForm(data)
         if form.is_valid():
@@ -591,6 +710,7 @@ def sourcingSupTemplate(request):
     return render(request, 'accounts/sourcing_suptemplate.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def sourcingSupAgreement(request):
     form = sourcingSupAgreementRequestForm()
     if request.method == 'POST':
@@ -607,6 +727,7 @@ def sourcingSupAgreement(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided.",
         }
         form = sourcingSupAgreementRequestForm(data)
         if form.is_valid():
@@ -618,6 +739,7 @@ def sourcingSupAgreement(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def legal(request):
     form = legalRequestForm()
     if request.method == 'POST':
@@ -627,6 +749,10 @@ def legal(request):
         templist = str(', '.join(template))
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('legalOffers') == "Single hourly rate for occasional legal advice in the amount needed from time to time. Billed monthly in arrears.":
+            price = "Single hourly rate for occasional legal advice in the amount needed from time to time. Billed monthly in arrears."
+        else:
+            price = "Lump sum monthly price for a fixed number of hours of legal support per month. Billed monthly in arrears."
         data = {
         'legal_area' : templist,
         'legalMonths' : datadict.get('legalMonths'),
@@ -638,6 +764,7 @@ def legal(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = legalRequestForm(data)
         print(form.errors)
@@ -650,6 +777,7 @@ def legal(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def disputeRequest(request):
     form = disputeCourtRequestForm()
     if request.method == 'POST':
@@ -678,6 +806,7 @@ def disputeRequest(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def disputeSelection(request):
     form = RequestForm()
     if request.method == 'POST':
@@ -690,6 +819,7 @@ def disputeSelection(request):
     return render(request, 'accounts/dispute_selection.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def disputeCourt(request):
     form = disputeCourtRequestForm()
     if request.method == 'POST':
@@ -697,6 +827,10 @@ def disputeCourt(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('courtArea') == "Legal representation in court proceedings (including e.g. drafting of legal briefs, representation in court hearings, attorney-client communications)":
+            price = "Lump sum fixed price and cover proceedings in one court instance only"
+        else:
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'courtArea' : datadict.get('courtArea'),
         'dispDescription' : datadict.get('dispDescription'),
@@ -706,6 +840,7 @@ def disputeCourt(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = disputeCourtRequestForm(data)
         if form.is_valid():
@@ -716,6 +851,7 @@ def disputeCourt(request):
     return render(request, 'accounts/dispute_court.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def disputeArbitration(request):
     form = disputeArbitrationRequestForm()
     if request.method == 'POST':
@@ -723,6 +859,10 @@ def disputeArbitration(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('arbiArea') == "Legal representation in arbitration proceedings (including e.g. drafting of legal briefs, representation in arbitration hearings, attorney-client communications)":
+            price = "Lump sum fixed price for the entire work."
+        else:
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'arbiArea' : datadict.get('arbiArea'),
         'dispDescription' : datadict.get('dispDescription'),
@@ -732,6 +872,7 @@ def disputeArbitration(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = disputeArbitrationRequestForm(data)
         if form.is_valid():
@@ -742,6 +883,7 @@ def disputeArbitration(request):
     return render(request, 'accounts/dispute_arbitration.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def disputeSettlement(request):
     form = disputeSettlementRequestForm()
     if request.method == 'POST':
@@ -749,6 +891,10 @@ def disputeSettlement(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('arbiArea') == "Legal representation in settlement negotiations (including e.g. drafting of a settlement agreement, negotiations with the other party, attorney-client communications)":
+            price = "Lump sum fixed price for the entire work."
+        else:
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
         data = {
         'settlementArea' : datadict.get('settlementArea'),
         'dispDescription' : datadict.get('dispDescription'),
@@ -758,6 +904,7 @@ def disputeSettlement(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = disputeSettlementRequestForm(data)
         if form.is_valid():
@@ -769,6 +916,7 @@ def disputeSettlement(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def merger(request):
     form = mergerRequestForm()
     if request.method == 'POST':
@@ -776,6 +924,10 @@ def merger(request):
         datadict = {k: q.getlist(k) if len(q.getlist(k))>1 else v for k, v in q.items()}
         lang = datadict.get('language')
         langlist = str(', '.join(lang))
+        if datadict.get('mergerArea') == "Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)":
+            price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
+        else:
+            price = "Lump sum fixed price for the entire work."
         data = {
         'sellOrBuy' : datadict.get('sellOrBuy'),
         'mergerType' : datadict.get('mergerType'),
@@ -791,6 +943,7 @@ def merger(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : price,
         }
         form = mergerRequestForm(data)
         if form.is_valid():
@@ -802,6 +955,7 @@ def merger(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def corporate(request):
     form = corporateRequestForm()
     if request.method == 'POST':
@@ -817,6 +971,7 @@ def corporate(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided.",
         }
         form = corporateRequestForm(data)
         if form.is_valid():
@@ -828,6 +983,7 @@ def corporate(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def dataPrivacy(request):
     form = dataRequestForm()
     if request.method == 'POST':
@@ -847,6 +1003,7 @@ def dataPrivacy(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Lump sum fixed price for the entire work.",
         }
         form = dataRequestForm(data)
         if form.is_valid():
@@ -858,6 +1015,7 @@ def dataPrivacy(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def training(request):
     form = trainingRequestForm()
     if request.method == 'POST':
@@ -878,6 +1036,7 @@ def training(request):
         'language' : langlist,
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
+        'priceOffer' : "Lump sum fixed price for the entire work.",
         }
         form = trainingRequestForm(data)
         if form.is_valid():
@@ -890,6 +1049,7 @@ def training(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def createRequest(request):
 
     form = RequestForm()
@@ -904,6 +1064,7 @@ def createRequest(request):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def updateRequest(request, pk):
 
     req = Request.objects.get(id=pk)
@@ -920,6 +1081,7 @@ def updateRequest(request, pk):
 
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def deleteRequest(request, pk):
     req = Request.objects.get(id=pk)
     if request.method == "POST":
@@ -937,6 +1099,7 @@ def home(request):
     return render(request, 'accounts/dashboard.html', context)
 
 @login_required(login_url='login')
+#@allowed_users(allowed_roles=['provider', 'admin'])
 def providerDashboard(request):
     
     context = {}
@@ -944,7 +1107,7 @@ def providerDashboard(request):
 
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['customer'])
+#@allowed_users(allowed_roles=['customer', 'admin'])
 def userPage(request):
     user = request.user
     customer = Customer.objects.get(name=user.username)
@@ -1026,6 +1189,69 @@ def providerUser(request):
 def userRating(request):
     context = {}
     return render(request, 'accounts/user_rating.html', context)
+
+
+@login_required(login_url='login')
+#@allowed_users(allowed_roles=['unauthorized', 'admin'])
+def unauthorizedRequests(request):
+    """
+    offers = Offer.objects.all()
+    customers = Customer.objects.all()
+
+    total_customers = customers.count()
+
+    total_offers = offers.count()
+    accepted = offers.filter(status='Accepted').count()
+    pending = offers.filter(status='Pending').count()
+    """
+    
+    requests = Request.objects.all()
+    b2b = B2BRequest.objects.all()
+    b2c = B2CRequest.objects.all()
+    employmentRequests = EmploymentTemplateRequest.objects.all()
+    empNegRequests = EmploymentNegotiationRequest.objects.all()
+    empDocRequests = EmploymentDocumentRequest.objects.all()
+    RealEstatePurchaseRequests = RealEstatePurchaseRequest.objects.all()
+    RealEstateLeasebackRequests = RealEstateLeasebackRequest.objects.all()
+    RealEstateLeaseRequests = RealEstateLeaseRequest.objects.all()
+    RealEstateEaseRequests = RealEstateEasementRequest.objects.all()
+    RealEstateConstRequests = RealEstateConstructionRequest.objects.all()
+    sourcingBusTempRequests = sourcingBusTemplateRequest.objects.all()
+    sourcingSupTempRequests = sourcingSupTemplateRequest.objects.all()
+    sourcingSupAgRequests = sourcingSupAgreementRequest.objects.all()
+    legalRequests = legalRequest.objects.all()
+    disputeCourtRequests = disputeCourtRequest.objects.all()
+    disputeArbiRequests = disputeArbitrationRequest.objects.all()
+    disputeSettRequests = disputeSettlementRequest.objects.all()
+    mergerRequests = mergerRequest.objects.all()
+    corporateRequests = corporateRequest.objects.all()
+    dataRequests = dataRequest.objects.all()
+    trainRequests = trainingRequest.objects.all()
+    context = {'requests': requests, 'emp' : employmentRequests, 'b2b' : b2b, 'b2c' : b2c, 'empNegRequests' : empNegRequests, 
+    'empDocRequests' : empDocRequests, 'RealEstatePurchaseRequests' : RealEstatePurchaseRequests, 'RealEstateLeasebackRequests' : RealEstateLeasebackRequests, 
+    'RealEstateLeaseRequests' : RealEstateLeaseRequests, 'RealEstateEaseRequests' : RealEstateEaseRequests, 'RealEstateConstRequests' : RealEstateConstRequests, 
+    'sourcingBusTempRequests' : sourcingBusTempRequests, 'sourcingSupTempRequests' : sourcingSupTempRequests, 'sourcingSupAgRequests' : sourcingSupAgRequests, 
+    'legalRequests' : legalRequests, 'disputeCourtRequests' : disputeCourtRequests, 'disputeArbiRequests' : disputeArbiRequests, 'disputeSettRequests' : disputeSettRequests, 
+    'mergerRequests' : employmentRequests, 'mergerRequests' : employmentRequests, 'corporateRequests' : corporateRequests, 'dataRequests' : dataRequests, 'trainRequests' : trainRequests}
+    return render(request, 'accounts/unauthorized_provider_requests.html', context)
+
+
+@login_required(login_url='login')
+#@allowed_users(allowed_roles=['unauthorized', 'admin'])
+def unauthorizedOffers(request):
+    """
+    offers = Offer.objects.all()
+    customers = Customer.objects.all()
+
+    total_customers = customers.count()
+
+    total_offers = offers.count()
+    accepted = offers.filter(status='Accepted').count()
+    pending = offers.filter(status='Pending').count()
+    """
+    requests = Request.objects.all()
+    context = {'requests': requests}
+    return render(request, 'accounts/unauthorized_provider_offers.html', context)
 
 
 """

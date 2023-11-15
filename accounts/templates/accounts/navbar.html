@@ -1,41 +1,91 @@
 {% load static %}
+<head>
+  <style>
+    .invisible {
+      flex: 0 1 auto;
+      height: 100%;
+      width: 35%;
+      visibility: hidden;
+    }
 
+    .hello {
+      flex: 0 1 auto;
+      height: 100%;
+      width: 35%;
+    }
 
-<style>
-  .hello-msg{
-    font-size: 18px;
-    color: #fff;
-    margin-right: 20px;
-  }
+    .image {
+      flex: 0 1 auto;
+    }
 
-  .navbar-custom {
-    background-color: #11999e;
-    justify-items: center;
-  }
+    .hello-msg {
+      width: 35%;
+      font-size: 18px;
+      color: #fff;
+      margin-right: 10px;
+    }
 
-</style>
+    img {
+      max-height: 100%;
+      max-width: 30%;
+      /*width: 400px;
+      height: 150px;*/
+    }
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #11999e;">
-<a href="{% url 'home' %}">
- <img src="{% static 'lexifylogo.jpg' %}">
-</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      {% if request.user.is_staff %}
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'contracts' %}">Contracts</a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
+    /* Style the navbar container */
+    .navbarcontainer {
+      display: flex;
+      text-align: center; /* Center-align the text */
+      background-color: #11999e;
+      color: #fff;
+      justify-content: flex-start;
+      position: relative;
+      align-items: center;
+    }
 
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logoutbtn {
+      color: white;
+      background-color: #3a3a3c;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+    }
+  </style>
+
+  <!--
+<nav
+  class="navbar navbar-expand-lg navbar-dark"
+  style="background-color: #11999e"
+>
+  <a href="{% url 'home' %}">
+    <img src="{% static 'lexifywide.png' %}" />
+  </a>
   <span class="hello-msg">Hello, {{request.user}}</span>
-  <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
-
+  <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
 </nav>
+-->
+  <div class="navbarcontainer">
+    <div class="invisible">Other</div>
+    <div class="image">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'lexifywide.png' %}" />
+      </a>
+    </div>
+    <div class="hello">
+      <span class="hello-msg" style="font-size: 22px">{{request.user}}</span>
+      <span
+        ><a
+          class="hello-msg logoutbtn"
+          href="{% url 'logout' %}"
+          style="font-size: 22px"
+          >Log Out</a
+        ></span
+      >
+    </div>
+  </div>
+</head>

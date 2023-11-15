@@ -47,222 +47,222 @@
 				</tr>
 
 				{% for req in requests %}
-					<tr>
+					<tr class="blur">
 						<td>{{req.title}}</td>
 						<td>Name</td>
 						<td>{{req.date_created}}</td>
 						<td class="timer"><b>{{req.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'provider_requests'%}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for e in emp %}
-					<tr>
+					<tr class="blur">
 						<td>{{e.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{e.date_created}}</td>
 						<td class="timer"><b>{{e.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' e.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for b in b2b %}
-					<tr>
+					<tr class="blur">
 						<td>{{b.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{b.date_created}}</td>
 						<td class="timer"><b>{{b.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' b.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for c in b2c %}
-					<tr>
+					<tr class="blur">
 						<td>{{c.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{c.date_created}}</td>
 						<td class="timer"><b>{{c.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' c.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for neg in empNegRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{neg.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{neg.date_created}}</td>
 						<td class="timer"><b>{{neg.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' neg.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for doc in empDocRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{doc.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{doc.date_created}}</td>
 						<td class="timer"><b>{{doc.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' doc.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for pur in RealEstatePurchaseRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{pur.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{pur.date_created}}</td>
 						<td class="timer"><b>{{pur.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' pur.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for lb in RealEstateLeasebackRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{lb.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{lb.date_created}}</td>
 						<td class="timer"><b>{{lb.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' lb.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for l in RealEstateLeaseRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{l.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{l.date_created}}</td>
 						<td class="timer"><b>{{l.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' l.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for ez in RealEstateEaseRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{ez.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{ez.date_created}}</td>
 						<td class="timer"><b>{{ez.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' ez.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for ec in RealEstateConstRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{ec.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{ec.date_created}}</td>
 						<td class="timer"><b>{{ec.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' ec.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for bt in sourcingBusTempRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{bt.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{bt.date_created}}</td>
 						<td class="timer"><b>{{bt.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' bt.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for st in sourcingSupTempRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{st.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{st.date_created}}</td>
 						<td class="timer"><b>{{st.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' st.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for sa in sourcingSupAgRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{sa.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{sa.date_created}}</td>
 						<td class="timer"><b>{{sa.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' sa.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for lr in legalRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{lr.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{lr.date_created}}</td>
 						<td class="timer"><b>{{lr.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' lr.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for dc in disputeCourtRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{dc.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{dc.date_created}}</td>
 						<td class="timer"><b>{{dc.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' dc.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for da in disputeArbiRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{da.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{da.date_created}}</td>
 						<td class="timer"><b>{{da.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' da.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for ds in disputeSettRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{ds.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{ds.date_created}}</td>
 						<td class="timer"><b>{{ds.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' ds.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for mr in mergerRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{mr.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{mr.date_created}}</td>
 						<td class="timer"><b>{{mr.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' mr.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for cr in corporateRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{cr.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{cr.date_created}}</td>
 						<td class="timer"><b>{{cr.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' cr.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for dr in dataRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{dr.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{dr.date_created}}</td>
 						<td class="timer"><b>{{dr.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' dr.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 
 				{% for trr in trainRequests %}
-					<tr>
+					<tr class="blur">
 						<td>{{trr.requestDescription}}</td>
 						<td>Name</td>
 						<td>{{trr.date_created}}</td>
 						<td class="timer"><b>{{trr.b2bDate|timeuntil}}</b></td>
-						<td><a class="btn btn-sm btn-info far fa-file-alt" href="{% url 'make_offer' trr.id %}"></a></td>
+						<td><a class="btn btn-sm btn-info far fa-file-alt" href=""></a></td>
 					</tr>
 				{% endfor %}
 

@@ -21,6 +21,21 @@ class Customer(models.Model):
 	def __str__(self):
 		return self.name
 
+class Provider(models.Model):
+	user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200, null=True)
+	firstname = models.CharField(max_length=200, null=True)
+	lastname = models.CharField(max_length=200, null=True)
+	phone = models.CharField(max_length=200, null=True)
+	email = models.CharField(max_length=200, null=True)
+	company = models.CharField(max_length=200, null=True)
+	company_id = models.CharField(max_length=200, null=True)
+	company_address = models.CharField(max_length=200, null=True)
+	date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+	def __str__(self):
+		return self.name
+
 
 class Offer(models.Model):
 	STATUS = (
@@ -37,21 +52,12 @@ class Offer(models.Model):
 	def __str__(self):
 		return self.offer.name
 
-class B2BRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+class B2BRequest(models.Model):	
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
@@ -60,12 +66,22 @@ class B2BRequest(models.Model):
 				)
 
 	RATINGS = (
-				('No, all LSPs can tender.', 'No, all LSPs can tender.'),
-				('Yes, at least 2 stars', 'Yes, at least 2 stars'),
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
 				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
 				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
-				('Yes, at least 5 stars', 'Yes, at least 5 stars'),
 		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
 
 	requestDescription = "B2B Sales Contract"
 	b2b_help = ArrayField(models.CharField(max_length=100, blank=True), size=5, default=list)
@@ -74,36 +90,48 @@ class B2BRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
-	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
+	priceOffer = models.CharField(max_length=300, null=True, blank=True)
 
 	def __str__(self):
 		return self.title
 
 
 class B2CRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
 				('On a quarterly basis, invoice sent at end of each quarter', 'On a quarterly basis, invoice sent at end of each quarter'),
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
+
+	RATINGS = (
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
 
 	requestDescription = "B2B Sales Contract"
 	b2c_help = ArrayField(models.CharField(max_length=50, blank=True), size=5, default=list)
@@ -112,9 +140,13 @@ class B2CRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -200,6 +232,7 @@ class EmploymentNegotiationRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -237,31 +270,41 @@ class EmploymentDocumentRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
 
 class RealEstatePurchaseRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
 				('On a quarterly basis, invoice sent at end of each quarter', 'On a quarterly basis, invoice sent at end of each quarter'),
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
+
+	RATINGS = (
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
 	REALESTATE_AGREEMENT = (
 						('Plot/Parcel of Land', 'Plot/Parcel of Land'),
 						('Shares in a Real Estate Company (FI: kiinteistöosakeyhtiö)', 'Shares in a Real Estate Company (FI: kiinteistöosakeyhtiö)'),
@@ -301,34 +344,48 @@ class RealEstatePurchaseRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
 
 class RealEstateLeasebackRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
 				('On a quarterly basis, invoice sent at end of each quarter', 'On a quarterly basis, invoice sent at end of each quarter'),
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
+
+	RATINGS = (
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
+
 	LEASEBACK_ROLE = (
 						('Seller and Tenant', 'Seller and Tenant'),
 						('Buyer and Landlord', 'Buyer and Landlord'),
@@ -363,34 +420,47 @@ class RealEstateLeasebackRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
 
 class RealEstateLeaseRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
 				('On a quarterly basis, invoice sent at end of each quarter', 'On a quarterly basis, invoice sent at end of each quarter'),
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
+
+	RATINGS = (
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
 	
 	REALESTATE_LEASE = (
 						('Holistic legal representation throughout the transaction process (including but not limited to drafting of the lease and related documents, required negotiations with the other party and completion of signing/closing related legal actions)', '(a) Holistic legal representation'),
@@ -429,34 +499,47 @@ class RealEstateLeaseRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
 
 class RealEstateEasementRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
 				('On a quarterly basis, invoice sent at end of each quarter', 'On a quarterly basis, invoice sent at end of each quarter'),
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
+
+	RATINGS = (
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
 
 	EASEMENT_PROPERTY = (
 						('Encumbered', 'Encumbered'),
@@ -478,34 +561,47 @@ class RealEstateEasementRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
 
 class RealEstateConstructionRequest(models.Model):
-	OFFERERS = (
-				('Attorneys-at-law (FI: asianajotoimistot), any size', 'Attorneys-at-law (FI: asianajotoimistot), any size'),
-				('Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.', 'Attorneys-at-law (FI: asianajotoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 5 lawyers', 'Attorneys-at-law, employing at least 5 lawyers'),
-				('Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Attorneys-at-law, employing at least 15 lawyers', 'Attorneys-at-law, employing at least 15 lawyers'),
-				('Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Attorneys-at-law, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms (FI: lakiasiaintoimistot), any size', 'Law firms (FI: lakiasiaintoimistot), any size'),
-				('Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.', 'Law firms (FI: lakiasiaintoimistot), any size. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 5 lawyers', 'Law firms, employing at least 5 lawyers'),
-				('Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 5 lawyers. Firm has been in operation for at least 5 years.'),
-				('Law firms, employing at least 15 lawyers', 'Law firms, employing at least 15 lawyers'),
-				('Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.', 'Law firms, employing at least 15 lawyers. Firm has been in operation for at least 5 years.'),
-				)
+	PROVIDERMODEL = (
+		('Attorneys-at-law (FI: asianajotoimistot)','Attorneys-at-law (FI: asianajotoimistot)'),
+		('Law firms (FI: lakiasiaintoimistot)','Law firms (FI: lakiasiaintoimistot)'),
+		('Both attorneys-at-law & law firms', 'Both attorneys-at-law & law firms'),
+	)
 
 	INVOICES = (
 				('On a monthly basis, invoice sent at end of each calendar month', 'On a monthly basis, invoice sent at end of each calendar month'),
 				('On a quarterly basis, invoice sent at end of each quarter', 'On a quarterly basis, invoice sent at end of each quarter'),
 				('One time invoice upon completion of the assignment', 'One time invoice upon completion of the assignment'),
 				)
+
+	RATINGS = (
+				('No, all legal service providers can tender.', 'No, all legal service providers can tender.'),
+				('Yes, at least 3 stars', 'Yes, at least 3 stars'),
+				('Yes, at least 4 stars', 'Yes, at least 4 stars'),
+		)
+	
+	PROVIDERSIZE = (
+		('No, the legal service provider can be of any size', 'No, the legal service provider can be of any size'),
+		('Yes, the legal service provider must employ at least 5 lawyers', 'Yes, the legal service provider must employ at least 5 lawyers'),
+		('Yes, the legal service provider must employ at least 15 lawyers', 'Yes, the legal service provider must employ at least 15 lawyers'),
+	)
+
+	PROVIDEROP = (
+		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
+		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
+		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+	)
 
 	REALESTATE_CONSTRUCTION = (
 						('Holistic legal representation throughout the transaction process (including but not limited to drafting of the construction agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)', '(a) Holistic legal representation'),
@@ -537,9 +633,13 @@ class RealEstateConstructionRequest(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
-	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
+	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
+	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -588,6 +688,7 @@ class sourcingBusTemplateRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -624,6 +725,7 @@ class sourcingSupTemplateRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -666,6 +768,7 @@ class sourcingSupAgreementRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -723,6 +826,7 @@ class legalRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -767,6 +871,7 @@ class disputeCourtRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -812,6 +917,7 @@ class disputeArbitrationRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -856,6 +962,7 @@ class disputeSettlementRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -941,6 +1048,7 @@ class mergerRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -988,6 +1096,7 @@ class corporateRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceTypeRunning = models.CharField(max_length=200, null=True, blank=False, choices=RUNNING_INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -1054,6 +1163,7 @@ class dataRequest(models.Model):
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title
@@ -1108,6 +1218,7 @@ class trainingRequest(models.Model):
 	otherInfo = models.TextField(blank=True, null=True)
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=OFFERERS)
 	title = models.CharField(max_length=200, null=True)
+	priceOffer = models.CharField(max_length=300, null=True)
 
 	def __str__(self):
 		return self.title

@@ -1,208 +1,466 @@
-{% extends 'accounts/main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'accounts/main.html' %} {% load static %} {% block content %}
 <!DOCTYPE html>
 <html>
-<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-	<script type= "text/javascript">
-		$(document).ready( function() 
-		{
-			$('#preview').on('click', function(e) {
-				e.preventDefault();
-				preview();
-			});
-		});
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#preview").on("click", function (e) {
+          e.preventDefault();
+          preview();
+        });
+      });
 
-		function preview()
-		{
-			var custType = $('#id_leasebackSeller').val();
-			var custTypeLabel = "I am: ";
-			var custTypeData = '<p>' + custTypeLabel + custType + '</p>';
+      function preview() {
+        var custType = $("#id_leasebackSeller").val();
+        var custTypeLabel = "I am: ";
+        var custTypeData = "<p>" + custTypeLabel + custType + "</p>";
 
-			var propDesc = $('#id_leasebackDescription').val();
-			var propDescLabel = "Description of the target property: ";
-			var propDescData = '<p>' + propDescLabel + ' ' + propDesc +'</p>';
+        var propDesc = $("#id_leasebackDescription").val();
+        var propDescLabel = "Description of the target property: ";
+        var propDescData = "<p>" + propDescLabel + " " + propDesc + "</p>";
 
-			var purRange = $('#id_leasebackRange').val();
-			var purRangeLabel = "Range of expected purchase price";
-			var purRangeData = '<p>' + purRangeLabel + ' ' + purRange +'</p>';
+        var purRange = $("#id_leasebackRange").val();
+        var purRangeLabel = "Range of expected purchase price";
+        var purRangeData = "<p>" + purRangeLabel + " " + purRange + "</p>";
 
-			var lddInsp = $('#id_leasebackInspection').val();
-			var lddInspLabel = "Legal Due Diligence inspection to be included in the work: ";
-			var lddInspData = '<p>' + lddInspLabel + ' ' + lddInsp +'</p>';
+        var lddInsp = $("#id_leasebackInspection").val();
+        var lddInspLabel =
+          "Legal Due Diligence inspection to be included in the work: ";
+        var lddInspData = "<p>" + lddInspLabel + " " + lddInsp + "</p>";
 
-			var supNature = $('#id_realLeaseBack').val();
-			var supNatureLabel = "Nature of the support needed: ";
-			var supNatureData = '<p>' + supNatureLabel + ' ' + supNature +'</p>';
+        var supNature = $("#id_realLeaseBack").val();
+        var supNatureLabel = "Nature of the support needed: ";
+        var supNatureData = "<p>" + supNatureLabel + " " + supNature + "</p>";
 
-			var otherInfoTitle = "Other information: ";
-			var otherInfo = $('#id_otherInfo').val();
-			var otherInfoData = '<p>' + otherInfoTitle + ' ' + otherInfo + '</p>';
+        var otherInfoTitle = "Other information: ";
+        var otherInfo = $("#id_otherInfo").val();
+        var otherInfoData = "<p>" + otherInfoTitle + " " + otherInfo + "</p>";
 
-			var trainDate = $('#id_b2bDate').val();
-			var trainDateLabel = "Your offer must be submitted by: ";
-			var trainDateData = '<p>' + trainDateLabel + ' ' + trainDate +'</p>';
+        var trainDate = $("#id_b2bDate").val();
+        var trainDateLabel = "Your offer must be submitted by: ";
+        var trainDateData = "<p>" + trainDateLabel + " " + trainDate + "</p>";
 
-			if($('#id_realLeaseBack').val() == 'Holistic legal representation throughout the transaction process (including but not limited to drafting of the sale and leaseback agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)' || $('#id_realLeaseBack').val() == 'First draft of the leaseback agreement, ready for delivery to the other party')
-			{
-				var invoiceType = "Lump sum fixed price for the entire work.";
-			}else if($('#id_realLeaseBack').val() == 'Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)')
-			{
-				var invoiceType = "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
-			}else if($('#id_realLeaseBack').val() == 'First draft of the sale and leaseback agreement, ready for delivery to the other party and thereafter occasional support with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)')
-			{
-				var invoiceType = "Lump sum fixed price for the first draft of the sale and leaseback agreement. Hourly rate for any subsequent occasional support. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
-			}
+        if (
+          $("#id_realLeaseBack").val() ==
+            "Holistic legal representation throughout the transaction process (including but not limited to drafting of the sale and leaseback agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)" ||
+          $("#id_realLeaseBack").val() ==
+            "First draft of the leaseback agreement, ready for delivery to the other party"
+        ) {
+          var invoiceType = "Lump sum fixed price for the entire work.";
+        } else if (
+          $("#id_realLeaseBack").val() ==
+          "Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)"
+        ) {
+          var invoiceType =
+            "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+        } else if (
+          $("#id_realLeaseBack").val() ==
+          "First draft of the sale and leaseback agreement, ready for delivery to the other party and thereafter occasional support with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)"
+        ) {
+          var invoiceType =
+            "Lump sum fixed price for the first draft of the sale and leaseback agreement. Hourly rate for any subsequent occasional support. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+        }
 
-			var invoiceTypeTitle = "Price to be offered: ";
-			var invoiceTypeData = '<p>' + invoiceTypeTitle + invoiceType + '</p>';
+        var invoiceTypeTitle = "Price to be offered: ";
+        var invoiceTypeData = "<p>" + invoiceTypeTitle + invoiceType + "</p>";
 
-			var invoiceTitle = "How I wish to be invoiced: ";
-			var invoiceWay = $('#id_invoiceType').val();
-			var invoiceData = '<p>' + invoiceTitle + ' ' + invoiceWay +'</p>';
+        var invoiceTitle = "How I wish to be invoiced: ";
+        var invoiceWay = $("#id_invoiceType").val();
+        var invoiceData = "<p>" + invoiceTitle + " " + invoiceWay + "</p>";
 
-			var languageBoxes = $('input[type="checkbox"]:checked').map(function() {return $(this).val();}).get().join(', '); document.body.append(languageBoxes);
-			var languageTitle = "Languages needed for the performance of the work: ";
-			var languageData = '<p>' + languageTitle + ' ' + languageBoxes +'</p>';
+        var languageBoxes = $('input[type="checkbox"]:checked')
+          .map(function () {
+            return $(this).val();
+          })
+          .get()
+          .join(", ");
+        document.body.append(languageBoxes);
+        var languageTitle =
+          "Languages needed for the performance of the work: ";
+        var languageData = "<p>" + languageTitle + " " + languageBoxes + "</p>";
 
-			var titleData = '<p><strong> I need contracts for a sale and leaseback arrangement.</strong></p>';
+        var titleData =
+          "<p><strong> I need contracts for a sale and leaseback arrangement.</strong></p>";
 
-			var legalText = "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
+        var legalText =
+          "The Lexify Contract GTCs are applied to all services provided in relation to this Lexify Request.";
 
-			var data = titleData + custTypeData + propDescData + purRangeData + lddInspData + supNatureData + otherInfoData + trainDateData + invoiceTypeData + invoiceData + languageData + legalText;
+        var data =
+          titleData +
+          custTypeData +
+          propDescData +
+          purRangeData +
+          lddInspData +
+          supNatureData +
+          otherInfoData +
+          trainDateData +
+          invoiceTypeData +
+          invoiceData +
+          languageData +
+          legalText;
 
-			$('#preview_data').html('');
-	        $('#preview_data').append(data);
-	        $('#preview_data').dialog({
-	            resizable: false,
-	            modal: true,
-	            buttons: 
-	            {
-	                'Submit': function() 
-	                {
-	                    //submit the form
-	                    $(this).dialog("close");
-	                },
-	                Cancel: function() 
-	                {
-	                    $(this).dialog("close");
-					}
-				}
-			});
-		}
-	</script>
+        $("#preview_data").html("");
+        $("#preview_data").append(data);
+        $("#preview_data").dialog({
+          resizable: false,
+          modal: true,
+          buttons: {
+            Submit: function () {
+              //submit the form
+              $(this).dialog("close");
+            },
+            Cancel: function () {
+              $(this).dialog("close");
+            },
+          },
+        });
+      }
+    </script>
 
-	<style type="text/css">
-		.tab { margin-left: 40px; }
-	</style>
-	
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Static Example</title>
+    <style type="text/css">
+      .tab {
+        margin-left: 40px;
+      }
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      body {
+        background: #11999e;
+      }
+    </style>
 
-	<!-- XDSoft DateTimePicker -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
-</head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Static Example</title>
 
-<body>
-	<h1>Create a Lexify Request</h1>
+    <!-- jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- XDSoft DateTimePicker -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+      integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+      integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <h1>Create a Lexify Request</h1>
     <h3>Help with Sale and Leaseback Agreements</h3>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card card-body">
-				<form action="" method="POST">
-					{% csrf_token %}
-					<label>Are you... </label>
-					<br>
-					{{ form.leasebackSeller }}
-					<br>
-					<hr>
-					<label>Describe the target property briefly (purpose of use, size, etc.)</label>
-					<br>
-					{{ form.leasebackDescription }}
-					<br>
-					<hr>
-					<label>What is the range of the expected purchase price (cash and debt free)? </label>
-					<br>
-					{{ form.leasebackRange }}
-					<br>
-					<hr>
-					<label><strong>[FOR BUYER/LANDLORD ONLY]</strong> Do you want a Legal Due Diligence inspection (with written report of material findings) to be included in the work?</label>
-					<br>
-					{{ form.leasebackInspection }}
-					<br>
-					<hr>
-					<label>Please specify the nature of the support needed (see description of alternatives below)</label>
-					<br>
-					{{ form.realLeaseBack }}
-					<br>
-					<br>
-					<label><strong>(a) Holistic legal representation </strong>throughout the transaction process (including but not limited to drafting of the sale and purchase agreement, lease agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions) <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
-					<label><strong>(b) Occasional support </strong>with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction) <br> <strong>NOTE</strong>: <i>Any offer you receive will provide an applicable hourly rate only. The total price of the service will be calculated by multiplying such hourly rate with the number of hours of legal support provided. Any offered hourly rate will be valid for 12 months from the date of the Lexify Contract or until the transaction is closed or abandoned, whichever is sooner.</i></label>
-					<label><strong>(c) First draft of the sale and purchase agreement and lease agreement</strong>, ready for delivery to the other party <br> <strong>NOTE: </strong><i>Any offers you receive will be for a lump sum fixed price</i></label>
-					<label><strong>(d) First draft of the sale and purchase agreement and lease agreement</strong>, ready for delivery to the other party <strong>and thereafter occasional support</strong> with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)<br> <strong>NOTE: </strong><i>Any offers you receive will be a combination of lump sum fixed price (for the first draft of the sale and purchase agreement and the lease agreement) and hourly rate (for any subsequent occasional support). Any offered hourly rate will be valid for 12 months from the date of the Lexify Contract or until the transaction is closed or abandoned, whichever is sooner.</i></label>
-					<hr>
-					<label>Any other background information you would want to provide to Lexify legal service providers?:</label>
-					<br>
-					<label><strong>NOTE</strong>: <i>Please do not include any personal data in the description</i></label>
-					<br>
-					{{ form.otherInfo }}
-					<br>
-					<hr>
-					<label>Who can make you an offer?</label>
-					{{ form.offerMaker }}
-					<br>
-					<hr>
-					<label>How do you want to be invoiced?</label>
-					{{ form.invoiceType }}
-					<br>
-					<hr>
-					<label>What languages are needed for the performance of the work?: </label>
-					<input type="checkbox" name="language" value="English" id="langEng">
-					<label for="langEng">English</label>
-					<input type="checkbox" name="language" value="Finnish" id="langFin">
-					<label for="langFin">Finnish</label>
-					<input type="checkbox" name="language" value="Swedish" id="langSwe">
-					<label for="langSwe">Swedish</label>
-					<input type="checkbox" name="language" value="German" id="langGer">
-					<label for="langGer">German</label>
-					<input type="checkbox" name="language" value="French" id="langFr">
-					<label for="langFr">French</label>
-					<br>
-					<hr>
-					<label>By when do you need offers from interested service providers?</label>
-					{{ form.b2bDate }}
-					<br>
-					<hr>
-					<label for="{{ form.title.id_for_label }}">Give a title for your request:</label>
-					{{ form.title }}
-					<br>
-					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
-					<br>
-					<hr>
-					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
-					<input type="submit" name="submit" id="submit "value="Submit your Lexify Request"/>
-					<input type="reset" name="reset" value="Clear All"/>
-				</form>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="card card-body">
-				<h5>Preview of your Lexify Request</h5>
-				<div id="preview_data" name="preview_data" title="Preview request form"></div>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-body">
+          <form action="" method="POST">
+            {% csrf_token %}
+            <label>Are you... </label>
+            <br />
+            {{ form.leasebackSeller }}
+            <br />
+            <hr />
+            <label
+              >Describe the target property briefly (purpose of use, size,
+              etc.)</label
+            >
+            <br />
+            {{ form.leasebackDescription }}
+            <br />
+            <hr />
+            <label
+              >What is the range of the expected purchase price (cash and debt
+              free)?
+            </label>
+            <br />
+            {{ form.leasebackRange }}
+            <br />
+            <hr />
+            <label
+              ><strong>[FOR BUYER/LANDLORD ONLY]</strong> Do you want a Legal
+              Due Diligence inspection (with written report of material
+              findings) to be included in the work?</label
+            >
+            <br />
+            {{ form.leasebackInspection }}
+            <br />
+            <hr />
+            <label
+              >Please specify the nature of the support needed (see description
+              of alternatives below)</label
+            >
+            <br />
+            {{ form.realLeaseBack }}
+            <br />
+            <br />
+            <label
+              ><strong>(a) Holistic legal representation </strong>throughout the
+              transaction process (including but not limited to drafting of the
+              sale and purchase agreement, lease agreement and related
+              documents, required negotiations with the other party and
+              completion of signing/closing related legal actions) <br />
+              <strong>NOTE: </strong
+              ><i
+                >Any offers you receive will be for a lump sum fixed price</i
+              ></label
+            >
+            <label
+              ><strong>(b) Occasional support </strong>with the transaction
+              process (e.g. commenting of transactional documents, legal advice
+              during different stages of the transaction) <br />
+              <strong>NOTE</strong>:
+              <i
+                >Any offer you receive will provide an applicable hourly rate
+                only. The total price of the service will be calculated by
+                multiplying such hourly rate with the number of hours of legal
+                support provided. Any offered hourly rate will be valid for 12
+                months from the date of the Lexify Contract or until the
+                transaction is closed or abandoned, whichever is sooner.</i
+              ></label
+            >
+            <label
+              ><strong
+                >(c) First draft of the sale and purchase agreement and lease
+                agreement</strong
+              >, ready for delivery to the other party <br />
+              <strong>NOTE: </strong
+              ><i
+                >Any offers you receive will be for a lump sum fixed price</i
+              ></label
+            >
+            <label
+              ><strong
+                >(d) First draft of the sale and purchase agreement and lease
+                agreement</strong
+              >, ready for delivery to the other party
+              <strong>and thereafter occasional support</strong> with the
+              transaction process (e.g. further commenting of transactional
+              documents, legal advice during different stages of the
+              transaction)<br />
+              <strong>NOTE: </strong
+              ><i
+                >Any offers you receive will be a combination of lump sum fixed
+                price (for the first draft of the sale and purchase agreement
+                and the lease agreement) and hourly rate (for any subsequent
+                occasional support). Any offered hourly rate will be valid for
+                12 months from the date of the Lexify Contract or until the
+                transaction is closed or abandoned, whichever is sooner.</i
+              ></label
+            >
+            <hr />
+            <label
+              >Any other background information you would want to provide to
+              Lexify legal service providers?:</label
+            >
+            <br />
+            <label
+              ><strong>NOTE</strong>:
+              <i
+                >Please do not include any personal data in the description</i
+              ></label
+            >
+            <br />
+            {{ form.otherInfo }}
+            <br />
+            <hr />
+            <label>Who can make you an offer?</label>
+            {{ form.offerMaker }}
+            <br />
+            <label
+              >Do you wish your legal service provider employs at least a
+              certain number of lawyers?</label
+            >
+            {{ form.offerSize }}
+            <label
+              >Do you wish your legal service provider has been in operation for
+              a minimum period of time?</label
+            >
+            {{ form.offerOperation }}
+            <br />
+            <hr />
+            <label
+              >Do tendering legal service providers need to have a minimum
+              Lexify customer feedback rating? This rating is based on feedback
+              a legal service provider has received previously from other Lexify
+              users.</label
+            >
+            {{ form.ratingType }}
+            <br />
+            <hr />
+            <label>How do you want to be invoiced?</label>
+            {{ form.invoiceType }}
+            <br />
+            <hr />
+            <label
+              >What languages are needed for the performance of the work?:
+            </label>
+            <input
+              type="checkbox"
+              name="language"
+              value="English"
+              id="langEng"
+            />
+            <label for="langEng">English</label>
+            <input
+              type="checkbox"
+              name="language"
+              value="Finnish"
+              id="langFin"
+            />
+            <label for="langFin">Finnish</label>
+            <input
+              type="checkbox"
+              name="language"
+              value="Swedish"
+              id="langSwe"
+            />
+            <label for="langSwe">Swedish</label>
+            <input
+              type="checkbox"
+              name="language"
+              value="German"
+              id="langGer"
+            />
+            <label for="langGer">German</label>
+            <input type="checkbox" name="language" value="French" id="langFr" />
+            <label for="langFr">French</label>
+            <br />
+            <hr />
+            <label
+              >By when do you need offers from interested service
+              providers?</label
+            >
+            {{ form.b2bDate }}
+            <br />
+            <hr />
+            <label for="{{ form.title.id_for_label }}"
+              >Give a title for your request:</label
+            >
+            {{ form.title }}
+            <br />
+            <label
+              ><strong>NOTE</strong>:
+              <i
+                >The title you give will not be shown to any service providers
+                and will be only for your personal Lexify Request archive.</i
+              ></label
+            >
+            <br />
+            <hr />
+            <input
+              type="button"
+              name="preview"
+              id="preview"
+              value="Preview Your Lexify Request"
+              onclick="scrollToTop()"
+            />
+            <input type="reset" name="reset" value="Clear All" />
+            <br />
+            <br />
+            <input
+              type="checkbox"
+              name="submitCheck"
+              id="submitCheck"
+              required
+            />
+            <label for="submitCheck">
+              I have carefully reviewed my Lexify Request and I'm ready to
+              submit it.
+            </label>
+            <br />
+            <span
+              ><i
+                >By submitting my Lexify Request I accept that Lexify will
+                automatically generate a binding Lexify Contract between my
+                company as the legal service purchaser and the legal service
+                provider submitting the best offer subject to the parameters in
+                my Lexify Request. Such Lexify Contract will not be generated if
+                i) no qualifying offers have been received prior to the
+                expiration of the relevant Lexify Offer or ii) I as
+                representative of the legal service purchaser cancel the
+                relevant Lexify Request before any qualifying offers have been
+                received.</i
+              ></span
+            >
+            <br />
+            <br />
+            <input
+              type="submit"
+              name="submit"
+              id="submit"
+              value="Submit Your Lexify Request"
+            />
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-body">
+          <h5>Preview of Your Lexify Request</h5>
+          <div
+            id="preview_data"
+            name="preview_data"
+            title="Preview request form"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function scrollToTop() {
+        window.scrollTo(0, 0);
+      }
 
-</body>
+      /*
+      function updatePreview() {
+        document.getElementById("preview_form").style.visibility = "visible";
+        if (document.getElementById("b2bcontract_template").checked) {
+          document.getElementById("legal_support").innerHTML = String(
+            document.getElementById("b2bcontract_template").value
+          );
+          var priceOffered = "Lump sum fixed price for the entire work.";
+        } else if (document.getElementById("b2bcontract_comments").checked) {
+          document.getElementById("legal_support").innerHTML = String(
+            document.getElementById("b2bcontract_template").value
+          );
+          var priceOffered =
+            "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+        } else {
+          document.getElementById("legal_support").innerHTML = String(
+            document.getElementById("b2bcontract_lawyer").value
+          );
+          var priceOffered =
+            "One hourly rate only. Hourly rate will be valid for 12 months from the Lexify Contract Date or until the transaction is closed or abandoned, whichever is sooner.";
+        }
+        document.getElementById("business").innerHTML = $("#id_note").val();
+        document.getElementById("info").innerHTML = $("#id_otherInfo").val();
+        document.getElementById("deadline").innerHTML = $("#id_b2bDate").val();
+        document.getElementById("invoice").innerHTML =
+          $("#id_invoiceType").val();
+        var languageBoxes = $('input[type="checkbox"]:checked')
+          .map(function () {
+            return $(this).val();
+          })
+          .get()
+          .join(", ");
+        document.getElementById("language").innerHTML = languageBoxes;
+        document.getElementById("price").innerHTML = priceOffered;
+      }*/
+    </script>
+  </body>
 </html>
 
 {% endblock %}
