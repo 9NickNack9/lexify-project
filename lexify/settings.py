@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'lexify.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-DEVELOPMENT_MODE = True#os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = False#os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
