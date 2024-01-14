@@ -260,17 +260,15 @@ def b2bRequest(request):
         'offerMaker' : datadict.get('offerMaker'),
         'invoiceType' : datadict.get('invoiceType'),
         'language' : langlist,
-        'offersize' : datadict.get('offerSize'),
-        'offeroperation' : datadict.get('offerOperation'),
-        'ratingtype' : datadict.get('ratingType'),
+        'offerSize' : datadict.get('offerSize'),
+        'offerOperation' : datadict.get('offerOperation'),
+        'ratingType' : datadict.get('ratingType'),
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
         'note': datadict.get('note'),
         'priceOffer' : price,
         }
-        print(data)
         form = B2BRequestForm(data)
-        print(form.errors)
         if form.is_valid():
             form.save()
             return redirect('contracts')
@@ -476,6 +474,9 @@ def realestatePurchase(request):
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
         'priceOffer' : price,
+        'offerSize' : datadict.get('offerSize'),
+        'offerOperation' : datadict.get('offerOperation'),
+        'ratingType' : datadict.get('ratingType'),
         }
         form = RealEstatePurchaseRequestForm(data)
         if form.is_valid():
