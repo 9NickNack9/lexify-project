@@ -127,7 +127,7 @@ def logoutUser(request):
 #@allowed_users(allowed_roles=['customer', 'admin'])
 def contracts(request):
     requests = Request.objects.all()
-    employmentRequests = EmploymentTemplateRequest.objects.all()
+    employmentRequests = B2BRequest.objects.all()
     #contracts = Contract.objects.all()
     context = {'requests': requests, 'emp' : employmentRequests}
     return render(request, 'accounts/contracts.html', context)
@@ -254,19 +254,23 @@ def b2bRequest(request):
             price = "Lump sum fixed price for the entire work."
         else:
             price = "Hourly rate price calculated by such hourly rate with the number of hours of legal support provided."
-        
         data = {
-        'b2b_help': templist,
+        'b2b_help': template,
         'otherInfo' : datadict.get('otherInfo'),
         'offerMaker' : datadict.get('offerMaker'),
         'invoiceType' : datadict.get('invoiceType'),
         'language' : langlist,
+        'offersize' : datadict.get('offerSize'),
+        'offeroperation' : datadict.get('offerOperation'),
+        'ratingtype' : datadict.get('ratingType'),
         'b2bDate' : datadict.get('b2bDate'),
         'title' : datadict.get('title'),
         'note': datadict.get('note'),
         'priceOffer' : price,
         }
+        print(data)
         form = B2BRequestForm(data)
+        print(form.errors)
         if form.is_valid():
             form.save()
             return redirect('contracts')

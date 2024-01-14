@@ -80,7 +80,7 @@ class B2BRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 
 	requestDescription = "B2B Sales Contract"
@@ -91,9 +91,9 @@ class B2BRequest(models.Model):
 	b2bDate = models.DateField(null=True)
 	otherInfo = models.TextField(blank=True, null=True)
 	offerMaker = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERMODEL)
-	offerSize = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDERSIZE)
-	offerOperation = models.CharField(max_length=200, null=True, blank=False, choices=PROVIDEROP)
-	ratingType = models.CharField(max_length=200, null=True, blank=False, choices=RATINGS)
+	offerSize = models.CharField(max_length=200, null=True, blank=True, choices=PROVIDERSIZE)
+	offerOperation = models.CharField(max_length=200, null=True, blank=True, choices=PROVIDEROP)
+	ratingType = models.CharField(max_length=200, null=True, blank=True, choices=RATINGS)
 	title = models.CharField(max_length=200, null=True)
 	invoiceType = models.CharField(max_length=200, null=True, blank=False, choices=INVOICES)
 	priceOffer = models.CharField(max_length=300, null=True, blank=True)
@@ -130,7 +130,7 @@ class B2CRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 
 	requestDescription = "B2B Sales Contract"
@@ -303,7 +303,7 @@ class RealEstatePurchaseRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 	REALESTATE_AGREEMENT = (
 						('Plot/Parcel of Land', 'Plot/Parcel of Land'),
@@ -326,10 +326,9 @@ class RealEstatePurchaseRequest(models.Model):
 				('No', 'No'),
 				)
 	REALESTATE_PURCHASE = (
-						('Holistic legal representation throughout the transaction process (including but not limited to drafting of the sale and purchase agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)', '(a) Holistic legal representation'),
-						('Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional support'),
+						('Comprehensive legal support throughout the transaction process (including but not limited to drafting of the sale and purchase agreement and related documents, required negotiations with the other party and related legal documents, required negotiations with the counterparty and support with completion of signing/closing related legal items)', '(a) Comprehensive legal support'),
+						('Occasional legal support with the transaction process when needed(e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional legal support'),
 						('First draft of the sale and purchase agreement, ready for delivery to the other party', '(c) First draft of sale and purchase agreement'),
-						('First draft of the sale and purchase agreement, ready for delivery to the buyer/seller and thereafter occasional support with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)', '(d) First draft of sale and purchase agreement + occasional support'),
 						)
 
 
@@ -383,7 +382,7 @@ class RealEstateLeasebackRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 
 	LEASEBACK_ROLE = (
@@ -402,10 +401,9 @@ class RealEstateLeasebackRequest(models.Model):
 				('No', 'No'),
 				)
 	REALESTATE_LEASEBACK = (
-						('Holistic legal representation throughout the transaction process (including but not limited to drafting of the sale and leaseback agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)', '(a) Holistic legal representation'),
-						('Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional support'),
-						('First draft of the sale and leaseback agreement, ready for delivery to the other party', '(c) First draft of sale and purchase and lease agreement'),
-						('First draft of the sale and leaseback agreement, ready for delivery to the other party and thereafter occasional support with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)', '(d) First draft of sale and purchase and lease agreement + occasional support'),
+						('Comprehensive legal support throughout the transaction process (including but not limited to drafting of the sale and purchase agreement, lease agreement and related legal documents, required negotiations with the counterparty and support with completion of signing/closing related legal items)', '(a) Comprehensive legal support'),
+						('Occasional legal support with the transaction process when needed (e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional legal support'),
+						('First drafts of the sale and leaseback agreement, ready for delivery to the other party', '(c) First drafts of sale and purchase and lease agreement'),
 						)
 
 
@@ -459,20 +457,19 @@ class RealEstateLeaseRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 	
 	REALESTATE_LEASE = (
-						('Holistic legal representation throughout the transaction process (including but not limited to drafting of the lease and related documents, required negotiations with the other party and completion of signing/closing related legal actions)', '(a) Holistic legal representation'),
-						('Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional support'),
+						('Comprehensive legal support throughout the transaction process (including but not limited to drafting of the lease and related legal documents, required negotiations with the counterparty and completion of signing/closing related legal actions)', '(a) Comprehensive legal support'),
+						('Occasional legal support with the transaction process when needed (e.g. commenting of transactional documents, legal advice during different stages of the process)', '(b) Occasional legal support'),
 						('First draft of the lease agreement, ready for delivery to the other party', '(c) First draft of lease agreement'),
-						('First draft of the lease agreement, ready for delivery to the other party and thereafter occasional support with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)', '(d) First draft of lease agreement + occasional support'),
 						)
 	
 	LEASE_AGREEMENT = (
 						('Lease of business premises', 'Lease of business premises'),
 						('Lease of residential premises', 'Lease of residential premises'),
-						('Lease of a plot or a parcel of land', 'Lease of a plot or a parcel of land'),
+						('Lease of plot or parcel of land', 'Lease of plot or parcel of land'),
 						)
 	
 	LEASE_ROLE = (
@@ -481,10 +478,10 @@ class RealEstateLeaseRequest(models.Model):
 					)
 	
 	LEASE_RANGE = (
-					('0-1000 EUR', '0-1000 EUR'),
-					('1000 EUR-10 000 EUR', '1000 EUR-10 000 EUR'),
-					('10 000 EUR-50 000 EUR', '10 000 EUR-50 000 EUR'),
-					('50 000 EUR+', '50 000 EUR+'),
+					('0-1 kEUR', '0-1 kEUR'),
+					('1-10 kEUR', '1-10 kEUR'),
+					('10-50 kEUR', '10-50 kEUR'),
+					('50 kEUR+', '50 kEUR+'),
 					)
 
 
@@ -538,7 +535,7 @@ class RealEstateEasementRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 
 	EASEMENT_PROPERTY = (
@@ -547,10 +544,9 @@ class RealEstateEasementRequest(models.Model):
 						)
 
 	EASEMENT_SUPPORT = (
-						('Holistic legal representation throughout the easement agreement negotiation process (including but not limited to drafting of the easement agreement and related documents (excluding purely technical maps and other similar documents), required communications with the other property owner, participation in necessary easement related meetings with competent authorities, etc.)', '(a) Holistic legal representation'),
-						('Occasional support with the easement agreement negotiation process (e.g. commenting of the easement agreement documentation, legal advice during different stages of the process)', '(b) Occasional support'),
-						('First draft of the easement agreement (excluding purely technical maps and similar documents), ready for delivery to the other property owner', '(c) First draft of lease agreement'),
-						('First draft of the easement agreement (excluding purely technical maps and similar documents), ready for delivery to the other property owner and thereafter occasional support with the easement agreement process (e.g. further commenting of the easement agreement documentation, legal advice during different stages of the process)', '(d) First draft of lease agreement + occasional support'),
+						('Comprehensive legal support throughout the easement agreement negotiation process (including but not limited to drafting of the easement agreement and related document (excluding maps and other primarily technical documents), required communications with the other property owner, participation innecessary easement related meetings with competent authorities, etc.)', '(a) Comprehensive legal support'),
+						('Occasional legal support with the easement agreement negotiation process (e.g. commenting of the easement agreement documentation, legal advice during different stages of the process when needed)', '(b) Occasional legal support'),
+						('First draft of the easement agreement, ready for delivery to the other property owner', '(c) First draft of easement agreement'),
 						)
 
 	requestDescription = "Easement Agreement"
@@ -600,26 +596,28 @@ class RealEstateConstructionRequest(models.Model):
 	PROVIDEROP = (
 		('No, the legal service provider can be of any age', 'No, the legal service provider can be of any age'),
 		('Yes, the legal service provider has been in operation for at least 5 years', 'Yes, the legal service provider has been in operation for at least 5 years'),
-		('Yes, the legal service provider has been in operation for at least 25 years', 'Yes, the legal service provider has been in operation for at least 25 years'),
+		('Yes, the legal service provider has been in operation for at least 20 years', 'Yes, the legal service provider has been in operation for at least 20 years'),
 	)
 
 	REALESTATE_CONSTRUCTION = (
-						('Holistic legal representation throughout the transaction process (including but not limited to drafting of the construction agreement and related documents, required negotiations with the other party and completion of signing/closing related legal actions)', '(a) Holistic legal representation'),
-						('Occasional support with the transaction process (e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional support'),
-						('First draft of the construction agreement, ready for delivery to the other party', '(c) First draft of construction agreement'),
-						('First draft of the construction agreement, ready for delivery to the other party and thereafter occasional support with the transaction process (e.g. further commenting of transactional documents, legal advice during different stages of the transaction)', '(d) First draft of construction agreement + occasional support'),
+						('Comprehensive legal support throughout the transaction process (including but not limited to drafting of the construction contract and related documents (excluding scope of work descriptions and other primarily technical appendices), required negotiations with the other party, etc.)', '(a) Comprehensive legal support'),
+						('Occasional legal support with the transaction process when needed (e.g. commenting of transactional documents, legal advice during different stages of the transaction)', '(b) Occasional legal support'),
+						('First draft of the construction contract, ready for delivery to the other party', '(c) First draft of construction contract'),
 						)
 
 	CONSTRUCTION_AGREEMENT = (
-								('Contractor (seller of construction services)', 'Contractor (seller of construction services)'),
-								('Client (buyer of construction services)', 'Client (buyer of construction services)')
-								)
+								('Property owner (buyer of construction services)', 'Property owner (buyer of construction services)'),
+								('Main contractor (as seller of construction services)', 'Main contractor (as seller of construction services)'),
+								('Main contractor (as buyer of subcontracted services)', 'Main contractor (as buyer of subcontracted services)'),(
+								'Subcontractor (as seller of construction services)', 'Subcontractor (as seller of construction services)')
+							)
 
 	CONSTRUCTION_PRICE = (
-					('0 - 50kEUR', '0 - 50kEUR'),
-					('50 - 100kEUR', '50 - 100kEUR'),
-					('100kEUR - 1mEUR', '100kEUR - 1mEUR'),
-					('1+mEUR', '1+mEUR'),
+					('0-50 kEUR', '0-50 kEUR'),
+					('50-100 kEUR', '50-100 kEUR'),
+					('100 kEUR-1 mEUR', '100 kEUR-1 mEUR'),
+					('1-10 mEUR', '1-10 mEUR'),
+					('10 mEUR+', '10 mEUR+'),
 					)
 
 

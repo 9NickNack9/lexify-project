@@ -1,95 +1,169 @@
-{% extends 'accounts/main.html' %}
+{% extends 'accounts/main.html' %} {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Archive</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        font-size: 20px;
+      }
 
-{% block content %}
+      body {
+        min-height: 100vh;
+        background-color: #11999e;
+      }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-	.timer{
-	/*background-color: #dc3545;*/
-	color: #dc3545;
-	border-radius: 5px;
-	padding: 5px;
-	}
+      .timer {
+        /*background-color: #dc3545;*/
+        color: #dc3545;
+        border-radius: 5px;
+        padding: 5px;
+      }
 
-	table {
-		display: table;
-		width: 100%;
-		table-layout: fixed;
-	}
+      table {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
 
-	th,td {
-		display: table-cell;
-		text-align: center;
-	}
+      th,
+      td {
+        display: table-cell;
+        text-align: center;
+      }
 
-	.checked {
-  		color: orange;
-	}
-</style>
+      .checked {
+        color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row bg">
+      <div class="col-md-12">
+        <br />
+        <h3 style="color: white">MY PENDING LEXIFY REQUESTS</h3>
+        <div class="card card-body">
+          <table class="table table-sm">
+            <tr>
+              <th>Lexify Request Title</th>
+              <th>Date Created</th>
+              <th>Time until Deadline for Offers</th>
+              <th>Number of Offers Received</th>
+              <th>View Lexify Request</th>
+              <th>Update Lexify Request</th>
+              <th>Cancel Lexify Request</th>
+            </tr>
+            {% for e in emp %}
+            <tr>
+              <td>{{e.title}}</td>
+              <td>{{e.date_created}}</td>
+              <td class="timer"><b>{{e.b2bDate|timeuntil}}</b></td>
+              <td>0</td>
+              <!--{{contracts.count}}-->
+              <td><a class="btn btn-sm btn-info">View</a></td>
+              <td><a class="btn btn-sm btn-warning">Update</a></td>
+              <td>
+                <!--
+                <a class="btn btn-sm btn-danger" onclick="cancelClick()"
+                  >Cancel</a
+                >-->
+                <input
+                  type="button"
+                  name="cancelButton"
+                  class="btn btn-sm btn-danger"
+                  value="Cancel"
+                  style="color: black"
+                  onclick="return confirm('Are you sure? This will remove your Lexify Request entirely, and you can no longer receive offers in response to this Lexify Request after cancellation.')"
+                />
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+          <td>
+            <a
+              class="btn btn-sm btn-info"
+              href="{% url 'request_selection' %}"
+              style="font-size: 20px"
+              ><strong>CREATE A NEW LEXIFY REQUEST</strong></a
+            >
+          </td>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <br />
+        <br />
+        <h3 style="color: white">MY LEXIFY CONTRACTS</h3>
+        <div class="card card-body">
+          <table class="table table-sm">
+            <tr>
+              <th>Lexify Contract Title</th>
+              <th>Date Created</th>
+              <th>Lexify Service Provider Name</th>
+              <th>Copy of the Lexify Contract</th>
+              <th>My Rating of the Lexify Service Provider</th>
+              <th>General Rating of the Lexify Service Provider</th>
+            </tr>
 
+            <tr>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </td>
+              <td>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <br />
+        <br />
+        <h3 style="color: white">MY EXPIRED LEXIFY REQUESTS</h3>
+        <div class="card card-body">
+          <table class="table table-sm">
+            <tr>
+              <th>Lexify Request Title</th>
+              <th>Date Created</th>
+              <th>Date Expired</th>
+              <th>Did Request Result in Contract?</th>
+              <th>Winning Offer</th>
+              <th>Top 2 Runner-up Offers</th>
+            </tr>
 
-<div class="row">
-	<div class="col-md-12">
-		<br>
-		<h5>My Lexify Requests</h5>
-		<div class="card card-body">
-			<table class="table table-sm">
-				<tr>
-					<th>Lexify Request Title</th>
-					<th>Date Created</th>
-					<th>Time until Lexify Request Deadline</th>
-					<th>Number of Offers Received</th>
-					<th>Update Lexify Request</th>
-					<th>Remove Lexify Request</th>
-				</tr>
-				{% for e in emp %}
-					<tr>
-						<td>{{e.title}}</td>
-						<td>{{e.date_created}}</td>
-						<td class="timer"><b>{{e.b2bDate|timeuntil}}</b></td>
-						<td>0</td><!--{{contracts.count}}-->
-						<td><a class="btn btn-sm btn-info">Update</a></td>
-						<td><a class="btn btn-sm btn-danger">Delete</a></td>
-					</tr>
-				{% endfor %}
-			</table>
-			<td><a class="btn btn-sm btn-info" href="{% url 'request_selection' %}">Create a new request</a></td>
-		</div>
-	</div>
-	<div class="col-md-12">
-		<br>
-		<h5>My Lexify Contracts</h5>
-		<div class="card card-body">
-			<table class="table table-sm">
-				<tr>
-					<th>Lexify Contract Title</th>
-					<th>Date Created</th>
-					<th>Lexify Service Provider Name</th>
-					<th>Copy of the Lexify Contract</th>
-					<th>My Rating of the Lexify Service Provider</th>
-					<th>General Rating of the Lexify Service Provider</th>
-				</tr>
-
-				<tr>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star"></span>
-					<span class="fa fa-star"></span></td>
-					<td><span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star"></span>
-					<span class="fa fa-star"></span></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-</div>
-
-{% endblock %}
+            <tr>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>Yes/No offers received</td>
+              <td>20.000 euros (Law Firm X)<br />N/A</td>
+              <td>25.000 euros (Law Firm X)<br />30.000 euros (Law Firm Y)</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>
