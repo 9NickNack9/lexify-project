@@ -127,7 +127,7 @@ def logoutUser(request):
 #@allowed_users(allowed_roles=['customer', 'admin'])
 def contracts(request):
     requests = Request.objects.all()
-    employmentRequests = B2BRequest.objects.all()
+    employmentRequests = RealEstatePurchaseRequest.objects.all()
     #contracts = Contract.objects.all()
     context = {'requests': requests, 'emp' : employmentRequests}
     return render(request, 'accounts/contracts.html', context)

@@ -177,6 +177,7 @@
       <div class="col-md-6">
         <div class="card card-body">
           <form action="" method="POST">
+            {% csrf_token %}
             <label>What is the object of sale? </label>
             <br />
             {{ form.realestateAgreement }}
