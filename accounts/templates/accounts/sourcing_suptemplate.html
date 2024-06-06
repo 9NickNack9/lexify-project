@@ -72,6 +72,9 @@
 
 	<style type="text/css">
 		.tab { margin-left: 40px; }
+		body {
+			background: #11999e;
+		  }
 	</style>
 	
 	<meta charset="utf-8">
@@ -87,10 +90,10 @@
 </head>
 
 <body>
-	<h1>Create a Lexify Request</h1>
-    <h3>Help with Reviewing Supplier's Contract Template</h3>
+	<h1  style="color: white">Create a Lexify Request</h1>
+    <h3  style="color: white">Help with Reviewing Supplier's Contract Template</h3>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<div class="card card-body">
 				<form action="" method="POST">
 					{% csrf_token %}
@@ -139,9 +142,48 @@
 					<label><strong>NOTE</strong>: <i>The title you give will not be shown to any service providers and will be only for your personal Lexify Request archive.</i></label>
 					<br>
 					<hr>
-					<input type="button" name="preview" id="preview" value="Preview your Lexify Request"/>
-					<input type="submit" name="submit" id="submit "value="Submit your Lexify Request"/>
-					<input type="reset" name="reset" value="Clear All"/>
+					<input
+		              type="button"
+		              name="preview"
+		              id="preview"
+		              value="Preview Your Lexify Request"
+		              onclick="scrollToTop()"
+		            />
+		            <input type="reset" name="reset" value="Clear All" />
+		            <br />
+		            <br />
+		            <input
+		              type="checkbox"
+		              name="submitCheck"
+		              id="submitCheck"
+		              required
+		            />
+		            <label for="submitCheck">
+		              I have carefully reviewed my Lexify Request and I'm ready to
+		              submit it.
+		            </label>
+		            <br />
+		            <span
+		              ><i
+		                >By submitting my Lexify Request I accept that Lexify will
+		                automatically generate a binding Lexify Contract between my
+		                company as the legal service purchaser and the legal service
+		                provider submitting the best offer subject to the parameters in
+		                my Lexify Request. Such Lexify Contract will not be generated if
+		                i) no qualifying offers have been received prior to the
+		                expiration of the relevant Lexify Offer or ii) I as
+		                representative of the legal service purchaser cancel the
+		                relevant Lexify Request before any qualifying offers have been
+		                received.</i
+		              ></span>
+		            <br />
+		            <br />
+		            <input
+		              type="submit"
+		              name="submit"
+		              id="submit"
+		              value="Submit Your Lexify Request"
+		            />
 				</form>
 			</div>
 		</div>
@@ -152,6 +194,11 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		function scrollToTop() {
+		  window.scrollTo(0, 0);
+		}
+	  </script>
 
 </body>
 </html>
